@@ -1,0 +1,21 @@
+/* src/popup/App.css */
+.app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background-color: #e30000;
+}
+
+.app-header, .app-footer {
+  padding: 10px;
+  background-color: #c10000;
+  text-align: center;
+}
+
+.app-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 10px;
+  background-color: #e20000;
+  text-align: center;
+}
