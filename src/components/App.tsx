@@ -1,6 +1,6 @@
-import PopupContainer from '../popup/PopupContainer'; 
+import PopupContainer from '../sidepanel/PopupContainer'; 
 
-const App = () => {
+export const App = () => {
   return (
     <div className="app-container">
       <PopupContainer />

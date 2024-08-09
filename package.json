@@ -1,8 +1,8 @@
 {
   "name": "devtaskmanager",
-  "description": "",
+  "description": "DevTaskManager is a browser extension designed specifically for developers. With this tool, you can efficiently organize your daily tasks, both in project-specific forums and on-the-go. The extension offers robust task management functionality and calendar integration, making it a perfect solution for streamlining workflows and meeting deadlines.",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.0.1",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -17,7 +17,8 @@
     "react-dom": "^18.3.1"
   },
   "devDependencies": {
-    "@crxjs/vite-plugin": "^1.0.14",
+    "@crxjs/vite-plugin": "2.0.0-beta.18",
+    "@types/estree": "^1.0.5",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
     "@typescript-eslint/eslint-plugin": "^7.15.0",
@@ -27,6 +28,6 @@
     "eslint-plugin-react-hooks": "^4.6.2",
     "eslint-plugin-react-refresh": "^0.4.7",
     "typescript": "^5.2.2",
-    "vite": "^5.3.4"
+    "vite": "4.5.3"
   }
 }

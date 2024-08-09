@@ -15,6 +15,8 @@ const [major, minor, patch] = version
         version_name: version,
         icons: {
             "16": "src/assets/icons/icon-16.png",
+            "48": "src/assets/icons/icon-48.png",
+            "128": "src/assets/icons/icon-128.png"
         },
         content_scripts: [
             {
@@ -25,10 +27,17 @@ const [major, minor, patch] = version
         background: {
             service_worker: "src/background/index.ts",
         },
-        action: {
-            default_popup: "src/popup/popup.html",
-            default_icon: {
-            },
+        side_panel: {
+            default_path: "src/sidepanel/sidepanel.html",
         },
-        permissions: ["storage", "sidePanel", "scripting",  "tabs", "unlimitedStorage"] as chrome.runtime.ManifestPermissions[],
+        // action: {
+        //     default_popup: "src/popup/popup.html",
+        //     default_icon: {
+        //     },
+        // },
+        permissions: ["storage", 
+            "sidePanel", 
+            "scripting",  
+            "tabs", 
+            "unlimitedStorage"] as chrome.runtime.ManifestPermissions[],
     }));
