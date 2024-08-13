@@ -1,3 +1,12 @@
+console.log("Content script loaded");
 chrome.action.onClicked.addListener(function() {
-    chrome.tabs.create({ url: chrome.runtime.getURL('src/pages/Panel/teste.html') });
-});
+    chrome.windows.create({
+      url: 'src/pages/Panel/index.html',
+      type: 'popup',
+      width: 1000,
+      height: 600,
+      left: 100,
+      top: 100
+    });
+  });
+  

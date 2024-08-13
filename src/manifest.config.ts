@@ -15,8 +15,19 @@ export default defineManifest(async () => ({
         "48": "src/assets/icons/icon-48.png",
         "128": "src/assets/icons/icon-128.png"
     },
+    //side_panel: {
+     //   default_path: "src/pages/Panel/PrinciPanel.html",
+    //},
     background: {
-        "service_worker": "src/pages/background/index.ts",
+        service_worker: "src/pages/background/index.ts",
     },
-    permissions: ["tabs", "storage", "scripting", "unlimitedStorage"] as chrome.runtime.ManifestPermissions[],
+    action: {
+        default_icon: {
+            "16": "src/assets/icons/icon-16.png",
+            "48": "src/assets/icons/icon-48.png",
+            "128": "src/assets/icons/icon-128.png"
+        },
+        //default_popup: "src/pages/Panel/index.html",
+    },
+    permissions: ["tabs", "storage", "scripting", "unlimitedStorage", "sidePanel", "activeTab", "windows"] as chrome.runtime.ManifestPermissions[],
 }));
