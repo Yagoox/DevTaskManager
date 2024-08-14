@@ -13,12 +13,13 @@
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "noEmit": false,
-    "jsx": "react",
-    "outDir": "./dist", // Diretório de saída para os arquivos compilados
+    "jsx": "react-jsx", // Ajuste recomendado para JSX moderno
+    "outDir": "./dist",
     "baseUrl": "./",
     "paths": {
-      "@/components/*": ["src/components/*"],
-      "@/lib/*": ["src/lib/*"]
+      "@/components/*": ["src/pages/components/*"],
+      "@/lib/*": ["src/lib/*"],
+      "@/types": ["src/types.d.ts"] // Adicione o alias para tipos
     }
   },
   "include": ["src"],
