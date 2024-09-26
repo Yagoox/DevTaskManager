@@ -11,10 +11,13 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@fontsource/inter": "^5.1.0",
+    "@fontsource/roboto": "^5.1.0",
     "@heroicons/react": "^2.1.5",
     "@radix-ui/react-checkbox": "^1.1.1",
     "@radix-ui/react-slot": "^1.1.0",
     "@radix-ui/react-tooltip": "^1.1.2",
+    "axios": "^1.7.7",
     "class-variance-authority": "^0.7.0",
     "lucide-react": "^0.426.0",
     "next": "^14.2.5",
@@ -40,6 +43,6 @@
     "eslint-plugin-react-refresh": "^0.4.7",
     "prettier": "^3.3.3",
     "typescript": "^5.2.2",
-    "vite": "4.5.3"
+    "vite": "^4.5.5"
   }
 }

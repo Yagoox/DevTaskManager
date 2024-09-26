@@ -1,8 +1,9 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
-import { crx } from '@crxjs/vite-plugin'
-import manifest from './src/manifest.config'
-import path from 'path'
+// vite.config.ts
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+import { crx } from '@crxjs/vite-plugin';
+import manifest from './frontend/src/manifest.config';
+import path from 'path';
 
 export default defineConfig({
   plugins: [
@@ -11,27 +12,24 @@ export default defineConfig({
   ],
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, './src'),
+      '@': path.resolve(__dirname, './frontend/src'),
     },
   },
   build: {
     rollupOptions: {
       input: {
-        main: path.resolve(__dirname, 'src/pages/Panel/PrinciPanel.html'),
+        background: 'frontend/src/pages/background/index.ts',
+        main: path.resolve(__dirname, 'frontend/src/pages/Panel/index.html'),
       }
     }
   },
-  //server: {
-    //host: '0.0.0.0', // Permite conexões de qualquer IP
-   // port: 2000,
-   // cors: {
-    //  origin: '*', // Considere restrições em produção
-     // methods: ['GET', 'POST', 'PUT', 'DELETE'],
-     // allowedHeaders: ['Content-Type', 'Authorization'],
-      //credentials: true
-   // },
-   // hmr: {
-    //  port: 2000, // Certifique-se de que a porta do HMR está correta
-   // },
-  //}
+  server: {
+    port: Number(process.env.VITE_PORT) || 5173, // Define a porta do servidor
+    host: process.env.VITE_HOST || 'localhost', // Define o host do servidor
+    hmr: {
+      protocol: 'ws',
+      host: process.env.VITE_HOST || 'localhost',
+      port: Number(process.env.VITE_PORT) || 5173,
+    },
+  },
 });

@@ -1,0 +1,51 @@
+/* src/pages/styles/tailwind.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Estilos personalizados */
+@layer components {
+    .btn {
+      @apply inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md font-medium shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 transition duration-150 ease-in-out;
+    }
+  
+    .btn-primary {
+      @apply bg-primary text-white hover:bg-blue-600 focus:ring-primary;
+    }
+  
+    .btn-secondary {
+      @apply bg-secondary text-white hover:bg-indigo-600 focus:ring-secondary;
+    }
+  
+    .input {
+      @apply block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm;
+    }
+  
+    .modal-overlay {
+      @apply fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50;
+    }
+  
+    .modal-content {
+      @apply bg-surface rounded-lg p-6 w-full max-w-md shadow-lg;
+    }
+  
+    .notification {
+      @apply flex items-center p-4 mb-4 rounded-md shadow-md bg-white animate-fade-in;
+      @apply fixed left-[50%] transform -translate-x-[50%] top-[5rem]; /* Ajuste conforme a altura do cabeçalho */
+    }
+  }
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.3s ease-out forwards;
+}

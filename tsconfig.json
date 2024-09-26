@@ -17,11 +17,11 @@
     "outDir": "./dist",
     "baseUrl": "./",
     "paths": {
-      "@/components/*": ["src/pages/components/*"],
-      "@/lib/*": ["src/lib/*"],
-      "@/types": ["src/types.d.ts"] // Adicione o alias para tipos
+      "@/components/*": ["frontend/src/pages/components/*"],
+      "@/lib/*": ["frontend/src/lib/*"],
+      "@/types": ["frontend/src/types.d.ts"] // Adicione o alias para tipos
     }
   },
-  "include": ["src"],
+  "include": ["frontend/src"],
   "exclude": ["build", "node_modules"]
 }
