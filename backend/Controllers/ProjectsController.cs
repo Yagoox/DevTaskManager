@@ -1,4 +1,5 @@
 // backend/Controllers/ProjectsController.cs
+
 using DevTaskManager.Models;
 using DevTaskManager.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -20,7 +21,7 @@ namespace DevTaskManager.Controllers
 
         // GET: api/projects
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Project>>> GetProjects()
+        public async Task<ActionResult<IEnumerable<Project>>> GetAllProjects()
         {
             var projects = await _projectService.GetAllProjectsAsync();
             return Ok(projects);
@@ -28,89 +29,55 @@ namespace DevTaskManager.Controllers
 
         // GET: api/projects/{id}
         [HttpGet("{id}")]
-        public async Task<ActionResult<Project>> GetProject(int id)
+        public async Task<ActionResult<Project>> GetProjectById(int id)
         {
-            var project = await _projectService.GetProjectByIdAsync(id);
-            if (project == null)
+            try
             {
-                return NotFound();
+                var project = await _projectService.GetProjectByIdAsync(id);
+                return Ok(project);
             }
-            return Ok(project);
+            catch (KeyNotFoundException)
+            {
+                return NotFound(new { message = "Projeto não encontrado." });
+            }
         }
 
         // POST: api/projects
         [HttpPost]
-        public async Task<ActionResult<Project>> CreateProject([FromBody] Project project)
+        public async Task<ActionResult<Project>> CreateProject([FromBody] ProjectCreateDto dto)
         {
-            var createdProject = await _projectService.CreateProjectAsync(project.Name);
-            return CreatedAtAction(nameof(GetProject), new { id = createdProject.Id }, createdProject);
+            var project = await _projectService.CreateProjectAsync(dto.Name);
+            return CreatedAtAction(nameof(GetProjectById), new { id = project.Id }, project);
         }
 
         // PUT: api/projects/{id}
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateProject(int id, [FromBody] Project updatedProject)
+        public async Task<IActionResult> UpdateProject(int id, [FromBody] ProjectUpdateDto dto)
         {
-            if (id != updatedProject.Id)
+            try
             {
-                return BadRequest();
+                await _projectService.UpdateProjectAsync(id, dto.Name);
+                return NoContent();
             }
-
-            var result = await _projectService.UpdateProjectAsync(id, updatedProject.Name);
-            if (!result)
+            catch (KeyNotFoundException)
             {
-                return NotFound();
+                return NotFound(new { message = "Projeto não encontrado." });
             }
-
-            return NoContent();
         }
 
         // DELETE: api/projects/{id}
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteProject(int id)
         {
-            var result = await _projectService.DeleteProjectAsync(id);
-            if (!result)
+            try
             {
-                return NotFound();
+                await _projectService.DeleteProjectAsync(id);
+                return NoContent();
             }
-
-            return NoContent();
-        }
-
-        // POST: api/projects/{projectId}/tasks
-        [HttpPost("{projectId}/tasks")]
-        public async Task<ActionResult<TaskItem>> CreateTask(int projectId, [FromBody] TaskItem task)
-        {
-            var createdTask = await _projectService.CreateTaskAsync(projectId, task.Name, task.Status);
-            if (createdTask == null)
+            catch (KeyNotFoundException)
             {
                 return NotFound(new { message = "Projeto não encontrado." });
             }
-            return CreatedAtAction(nameof(GetProject), new { id = projectId }, createdTask);
-        }
-
-        // PUT: api/projects/{projectId}/tasks/{taskId}
-        [HttpPut("{projectId}/tasks/{taskId}")]
-        public async Task<IActionResult> UpdateTask(int projectId, int taskId, [FromBody] TaskItem updatedTask)
-        {
-            var result = await _projectService.UpdateTaskAsync(projectId, taskId, updatedTask.Name, updatedTask.Status);
-            if (!result)
-            {
-                return NotFound();
-            }
-            return NoContent();
-        }
-
-        // DELETE: api/projects/{projectId}/tasks/{taskId}
-        [HttpDelete("{projectId}/tasks/{taskId}")]
-        public async Task<IActionResult> DeleteTask(int projectId, int taskId)
-        {
-            var result = await _projectService.DeleteTaskAsync(projectId, taskId);
-            if (!result)
-            {
-                return NotFound();
-            }
-            return NoContent();
         }
     }
 }

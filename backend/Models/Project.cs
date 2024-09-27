@@ -1,4 +1,5 @@
 // backend/Models/Project.cs
+
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -13,7 +14,7 @@ namespace DevTaskManager.Models
         
         [Required]
         [MaxLength(100)]
-        public string Name { get; set; }
+        public required string Name { get; set; }
 
         // Relação um-para-muitos com TaskItem
         public virtual ICollection<TaskItem> Tasks { get; set; } = new List<TaskItem>();

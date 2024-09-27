@@ -1,117 +1,78 @@
 // backend/Services/ProjectService.cs
-using DevTaskManager.Data;
+
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using DevTaskManager.Models;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace DevTaskManager.Services
 {
     public class ProjectService : IProjectService
     {
-        private readonly AppDbContext _context;
+        private readonly DevTaskManagerContext _context;
 
-        public ProjectService(AppDbContext context)
+        public ProjectService(DevTaskManagerContext context)
         {
             _context = context;
         }
 
+        public async Task<Project> CreateProjectAsync(string name)
+        {
+            var project = new Project
+            {
+                Name = name
+            };
+
+            _context.Projects.Add(project);
+            await _context.SaveChangesAsync();
+
+            return project;
+        }
+
         public async Task<IEnumerable<Project>> GetAllProjectsAsync()
         {
-            return await _context.Projects.Include(p => p.Tasks).ToListAsync();
+            return await _context.Projects
+                .Include(p => p.Tasks) // Inclui as tarefas relacionadas
+                .ToListAsync();
         }
 
         public async Task<Project> GetProjectByIdAsync(int id)
         {
-            return await _context.Projects.Include(p => p.Tasks)
+            var project = await _context.Projects
+                .Include(p => p.Tasks) // Inclui as tarefas relacionadas
                 .FirstOrDefaultAsync(p => p.Id == id);
-        }
 
-        public async Task<Project> CreateProjectAsync(string name)
-        {
-            var project = new Project { Name = name };
-            _context.Projects.Add(project);
-            await _context.SaveChangesAsync();
+            if (project == null)
+            {
+                throw new KeyNotFoundException("Projeto não encontrado.");
+            }
+
             return project;
         }
 
-        public async Task<bool> UpdateProjectAsync(int id, string name)
+        public async Task UpdateProjectAsync(int id, string name)
         {
             var project = await _context.Projects.FindAsync(id);
             if (project == null)
             {
-                return false;
+                throw new KeyNotFoundException("Projeto não encontrado.");
             }
 
             project.Name = name;
             _context.Projects.Update(project);
             await _context.SaveChangesAsync();
-            return true;
         }
 
-        public async Task<bool> DeleteProjectAsync(int id)
+        public async Task DeleteProjectAsync(int id)
         {
             var project = await _context.Projects.FindAsync(id);
             if (project == null)
             {
-                return false;
+                throw new KeyNotFoundException("Projeto não encontrado.");
             }
 
             _context.Projects.Remove(project);
             await _context.SaveChangesAsync();
-            return true;
-        }
-
-        public async Task<TaskItem> CreateTaskAsync(int projectId, string name, string status)
-        {
-            var project = await _context.Projects.FindAsync(projectId);
-            if (project == null)
-            {
-                return null;
-            }
-
-            var task = new TaskItem
-            {
-                Name = name,
-                Status = status,
-                ProjectId = projectId
-            };
-
-            _context.TaskItems.Add(task);
-            await _context.SaveChangesAsync();
-            return task;
-        }
-
-        public async Task<bool> UpdateTaskAsync(int projectId, int taskId, string name, string status)
-        {
-            var task = await _context.TaskItems
-                .FirstOrDefaultAsync(t => t.Id == taskId && t.ProjectId == projectId);
-            if (task == null)
-            {
-                return false;
-            }
-
-            task.Name = name;
-            task.Status = status;
-
-            _context.TaskItems.Update(task);
-            await _context.SaveChangesAsync();
-            return true;
-        }
-
-        public async Task<bool> DeleteTaskAsync(int projectId, int taskId)
-        {
-            var task = await _context.TaskItems
-                .FirstOrDefaultAsync(t => t.Id == taskId && t.ProjectId == projectId);
-            if (task == null)
-            {
-                return false;
-            }
-
-            _context.TaskItems.Remove(task);
-            await _context.SaveChangesAsync();
-            return true;
         }
     }
 }

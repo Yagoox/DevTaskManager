@@ -1,46 +1,41 @@
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.EntityFrameworkCore;
-using DevTaskManager.Data;
-using DevTaskManager.Services;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.OpenApi.Models; // Para Swagger
-using Microsoft.Extensions.Configuration;  // Para acessar GetConnectionString
- // Para UseSqlite
+// backend/Program.cs
 
+using Microsoft.EntityFrameworkCore;
+using DevTaskManager.Services;
+using DevTaskManager.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Adicionar serviços ao container.
+// Adiciona serviços ao contêiner.
 builder.Services.AddControllers();
 
-// Configurar o CORS
+// Registrar os serviços
+builder.Services.AddScoped<IProjectService, ProjectService>();
+builder.Services.AddScoped<ITaskService, TaskService>();
+
+// Configurar o DbContext com SQLite
+builder.Services.AddDbContext<DevTaskManagerContext>(options =>
+    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+// Configurar CORS para permitir requisições do frontend
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAllOrigins",
+    options.AddPolicy("AllowFrontend",
         builder =>
         {
-            builder.AllowAnyOrigin()
+            builder.WithOrigins("http://localhost:5173") // Ajuste conforme a URL do seu frontend
                    .AllowAnyHeader()
                    .AllowAnyMethod();
         });
 });
 
-// Adicionar o Swagger para documentação da API
+// Opcional: Adicionar Swagger para documentação da API
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// Configurar o DbContext com SQLite
-builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
-
-// Registrar os serviços
-builder.Services.AddScoped<IProjectService, ProjectService>();
-
 var app = builder.Build();
 
-// Configurar o middleware de pipeline de requisição HTTP.
+// Configurar o pipeline HTTP.
 if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
@@ -48,10 +43,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-// Usar o CORS
-app.UseCors("AllowAllOrigins");
+app.UseCors("AllowFrontend");
 
-// app.UseHttpsRedirection(); // Descomente se estiver usando HTTPS
+app.UseRouting();
 
 app.UseAuthorization();
 
