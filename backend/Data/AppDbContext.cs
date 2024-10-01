@@ -13,7 +13,7 @@ namespace DevTaskManager.Data
         }
 
         public DbSet<Project> Projects { get; set; }
-        public DbSet<TaskItem> TaskItems { get; set; }
+        public DbSet<TaskItem> Tasks { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

@@ -9,8 +9,8 @@ namespace DevTaskManager.Services
     public interface IProjectService
     {
         Task<Project> CreateProjectAsync(string name);
-        Task<IEnumerable<Project>> GetAllProjectsAsync();
-        Task<Project> GetProjectByIdAsync(int id);
+        Task<IEnumerable<ProjectDto>> GetAllProjectsAsync();
+        Task<ProjectDto> GetProjectByIdAsync(int id);
         Task UpdateProjectAsync(int id, string name);
         Task DeleteProjectAsync(int id);
     }

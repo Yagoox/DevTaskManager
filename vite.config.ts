@@ -24,12 +24,19 @@ export default defineConfig({
     }
   },
   server: {
-    port: Number(process.env.VITE_PORT) || 5173, // Define a porta do servidor
-    host: process.env.VITE_HOST || 'localhost', // Define o host do servidor
+    port: Number(process.env.VITE_PORT) || 5173, // Porta do servidor frontend
+    host: process.env.VITE_HOST || 'localhost', // Host do servidor frontend
     hmr: {
       protocol: 'ws',
       host: process.env.VITE_HOST || 'localhost',
       port: Number(process.env.VITE_PORT) || 5173,
+    },
+    proxy: { // Adicione esta seção para configurar o proxy
+      '/api': {
+        target: 'http://localhost:5146', // URL do backend
+        changeOrigin: true,
+        secure: false,
+      },
     },
   },
 });

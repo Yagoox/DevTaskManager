@@ -5,6 +5,7 @@ using DevTaskManager.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using System.Linq; // Adicionado para uso de LINQ
 
 namespace DevTaskManager.Controllers
 {
@@ -21,12 +22,25 @@ namespace DevTaskManager.Controllers
 
         // POST: api/projects/{projectId}/tasks
         [HttpPost]
-        public async Task<ActionResult<TaskItem>> CreateTask(int projectId, [FromBody] TaskCreateDto dto)
+        public async Task<ActionResult<TaskDto>> CreateTask(int projectId, [FromBody] TaskCreateDto dto)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             try
             {
                 var task = await _taskService.CreateTaskAsync(projectId, dto.Name, dto.Status);
-                return CreatedAtAction(nameof(GetTasks), new { projectId = projectId, taskId = task.Id }, task);
+
+                var taskDto = new TaskDto
+                {
+                    Id = task.Id,
+                    Name = task.Name,
+                    Status = task.Status
+                };
+
+                return CreatedAtAction("GetTaskById", new { projectId = projectId, taskId = task.Id }, taskDto);
             }
             catch (KeyNotFoundException)
             {
@@ -38,6 +52,11 @@ namespace DevTaskManager.Controllers
         [HttpPut("{taskId}")]
         public async Task<IActionResult> UpdateTask(int projectId, int taskId, [FromBody] TaskCreateDto dto)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             try
             {
                 await _taskService.UpdateTaskAsync(projectId, taskId, dto.Name, dto.Status);
@@ -66,12 +85,18 @@ namespace DevTaskManager.Controllers
 
         // GET: api/projects/{projectId}/tasks
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<TaskItem>>> GetTasks(int projectId)
+        public async Task<ActionResult<IEnumerable<TaskDto>>> GetTasks(int projectId)
         {
             try
             {
                 var tasks = await _taskService.GetTasksAsync(projectId);
-                return Ok(tasks);
+                var taskDtos = tasks.Select(task => new TaskDto
+                {
+                    Id = task.Id,
+                    Name = task.Name,
+                    Status = task.Status
+                });
+                return Ok(taskDtos);
             }
             catch (KeyNotFoundException)
             {
@@ -80,18 +105,24 @@ namespace DevTaskManager.Controllers
         }
 
         // GET: api/projects/{projectId}/tasks/{taskId}
-        [HttpGet("{taskId}")]
-        public async Task<ActionResult<TaskItem>> GetTaskById(int projectId, int taskId)
+        [HttpGet("{taskId}", Name = "GetTaskById")]
+        public async Task<ActionResult<TaskDto>> GetTaskById(int projectId, int taskId)
         {
             try
             {
                 var task = await _taskService.GetTaskByIdAsync(projectId, taskId);
-                return Ok(task);
+                var taskDto = new TaskDto
+                {
+                    Id = task.Id,
+                    Name = task.Name,
+                    Status = task.Status
+                };
+                return Ok(taskDto);
             }
             catch (KeyNotFoundException)
             {
                 return NotFound(new { message = "Tarefa ou Projeto não encontrado." });
             }
         }
-    }
-}
+    } // Fecha a classe TasksController
+} // Fecha o namespace DevTaskManager.Controllers

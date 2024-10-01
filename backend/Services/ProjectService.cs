@@ -1,17 +1,19 @@
 // backend/Services/ProjectService.cs
 
 using System.Collections.Generic;
+using System.Linq; // Importante para usar o LINQ
 using System.Threading.Tasks;
 using DevTaskManager.Models;
 using Microsoft.EntityFrameworkCore;
+using DevTaskManager.Data;
 
 namespace DevTaskManager.Services
 {
     public class ProjectService : IProjectService
     {
-        private readonly DevTaskManagerContext _context;
+        private readonly AppDbContext _context;
 
-        public ProjectService(DevTaskManagerContext context)
+        public ProjectService(AppDbContext context)
         {
             _context = context;
         }
@@ -29,17 +31,32 @@ namespace DevTaskManager.Services
             return project;
         }
 
-        public async Task<IEnumerable<Project>> GetAllProjectsAsync()
+        public async Task<IEnumerable<ProjectDto>> GetAllProjectsAsync()
         {
-            return await _context.Projects
-                .Include(p => p.Tasks) // Inclui as tarefas relacionadas
+            var projects = await _context.Projects
+                .Include(p => p.Tasks)
                 .ToListAsync();
+
+            // Mapear os projetos para ProjectDto
+            var projectDtos = projects.Select(p => new ProjectDto
+            {
+                Id = p.Id,
+                Name = p.Name,
+                Tasks = p.Tasks.Select(t => new TaskDto
+                {
+                    Id = t.Id,
+                    Name = t.Name,
+                    Status = t.Status
+                }).ToList()
+            });
+
+            return projectDtos;
         }
 
-        public async Task<Project> GetProjectByIdAsync(int id)
+        public async Task<ProjectDto> GetProjectByIdAsync(int id)
         {
             var project = await _context.Projects
-                .Include(p => p.Tasks) // Inclui as tarefas relacionadas
+                .Include(p => p.Tasks)
                 .FirstOrDefaultAsync(p => p.Id == id);
 
             if (project == null)
@@ -47,7 +64,20 @@ namespace DevTaskManager.Services
                 throw new KeyNotFoundException("Projeto não encontrado.");
             }
 
-            return project;
+            // Mapear para ProjectDto
+            var projectDto = new ProjectDto
+            {
+                Id = project.Id,
+                Name = project.Name,
+                Tasks = project.Tasks.Select(t => new TaskDto
+                {
+                    Id = t.Id,
+                    Name = t.Name,
+                    Status = t.Status
+                }).ToList()
+            };
+
+            return projectDto;
         }
 
         public async Task UpdateProjectAsync(int id, string name)

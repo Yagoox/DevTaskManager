@@ -21,7 +21,7 @@ namespace DevTaskManager.Controllers
 
         // GET: api/projects
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Project>>> GetAllProjects()
+        public async Task<ActionResult<IEnumerable<ProjectDto>>> GetAllProjects()
         {
             var projects = await _projectService.GetAllProjectsAsync();
             return Ok(projects);
@@ -29,7 +29,7 @@ namespace DevTaskManager.Controllers
 
         // GET: api/projects/{id}
         [HttpGet("{id}")]
-        public async Task<ActionResult<Project>> GetProjectById(int id)
+        public async Task<ActionResult<ProjectDto>> GetProjectById(int id)
         {
             try
             {

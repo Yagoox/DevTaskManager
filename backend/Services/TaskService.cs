@@ -4,14 +4,16 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using DevTaskManager.Models;
 using Microsoft.EntityFrameworkCore;
+using DevTaskManager.Data;
 
 namespace DevTaskManager.Services
 {
+    
     public class TaskService : ITaskService
     {
-        private readonly DevTaskManagerContext _context;
+        private readonly AppDbContext _context;
 
-        public TaskService(DevTaskManagerContext context)
+        public TaskService(AppDbContext context)
         {
             _context = context;
         }
@@ -33,6 +35,9 @@ namespace DevTaskManager.Services
 
             _context.Tasks.Add(task);
             await _context.SaveChangesAsync();
+
+            // Adicione este log para verificar se o Id foi gerado
+            Console.WriteLine($"Task created with Id: {task.Id}");
 
             return task;
         }

@@ -3,29 +3,36 @@
 using Microsoft.EntityFrameworkCore;
 using DevTaskManager.Services;
 using DevTaskManager.Models;
+using DevTaskManager.Data;
+using System.Text.Json.Serialization; // Diretiva 'using' movida para o topo
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Adiciona serviços ao contêiner.
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+    options.JsonSerializerOptions.PropertyNameCaseInsensitive = true; // Torna a desserialização insensível a maiúsculas/minúsculas
+    options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+});
 
 // Registrar os serviços
 builder.Services.AddScoped<IProjectService, ProjectService>();
 builder.Services.AddScoped<ITaskService, TaskService>();
 
-// Configurar o DbContext com SQLite
-builder.Services.AddDbContext<DevTaskManagerContext>(options =>
+// Configurar o DbContext com SQLite usando o AppDbContext
+builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // Configurar CORS para permitir requisições do frontend
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend",
-        builder =>
+        policyBuilder =>
         {
-            builder.WithOrigins("http://localhost:5173") // Ajuste conforme a URL do seu frontend
-                   .AllowAnyHeader()
-                   .AllowAnyMethod();
+            policyBuilder.WithOrigins("http://localhost:5173") // Ajuste conforme a URL do seu frontend
+                         .AllowAnyHeader()
+                         .AllowAnyMethod();
         });
 });
 

@@ -9,5 +9,11 @@ export interface Task {
 export interface Project {
   id: number;
   name: string;
-  tasks: Task[];
+  tasks: Task[]; // Assegure-se de que tasks é um array de Task
+}
+
+export interface NotificationType {
+  id: number;
+  message: string;
+  type: 'success' | 'error' | 'info';
 }

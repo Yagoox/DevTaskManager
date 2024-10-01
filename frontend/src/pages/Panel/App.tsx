@@ -1,28 +1,17 @@
 // frontend/src/pages/Panel/App.tsx
 
 import React, { useState, useEffect } from 'react';
+import ProjectService from '../../services/ProjectService';
+import TaskService from '../../services/TaskService';
 import Header from './components/Header';
-import MobileMenu from './components/MobileMenu';
 import Sidebar from './components/Sidebar';
+import TaskTable from './components/TaskTable';
 import ProjectModal from './components/ProjectModal';
 import TaskModal from './components/TaskModal';
 import Notification from './components/Notification';
-import TaskTable from './components/TaskTable';
-import axios from 'axios';
-import '@fontsource/inter/400.css';
-import '@fontsource/inter/600.css';
-import { Project } from '../../types';
+import { Project, NotificationType } from '../../types';
 import '@/pages/styles/tailwind.css';
-
-
-interface NotificationType {
-  id: number;
-  message: string;
-  type: 'success' | 'error' | 'info';
-}
-
-axios.defaults.baseURL = 'http://localhost:5146/api';
-
+import MobileMenu from './components/MobileMenu'; 
 
 const App: React.FC = () => {
   const [mobileMenuVisible, setMobileMenuVisible] = useState(false);
@@ -34,17 +23,37 @@ const App: React.FC = () => {
   const [editingTaskId, setEditingTaskId] = useState<number | null>(null);
   const [notifications, setNotifications] = useState<NotificationType[]>([]);
 
-  console.log('App Component Rendered');  
-
   useEffect(() => {
-    axios.get('/projects')
-      .then(response => {
-        setProjects(response.data);
-      })
-      .catch(error => {
+    const fetchProjects = async () => {
+      try {
+        const allProjects = await ProjectService.getAllProjects();
+        console.log('Dados recebidos (projects):', allProjects);
+        if (Array.isArray(allProjects)) {
+          // Verificação de IDs únicos
+          const uniqueIds = new Set<number>();
+          const validProjects = allProjects.filter((project) => {
+            if (project.id === undefined || project.id === null) {
+              console.warn('Projeto sem ID:', project);
+              return false;
+            }
+            if (uniqueIds.has(project.id)) {
+              console.warn('ID duplicado de projeto encontrado:', project.id);
+              return false;
+            }
+            uniqueIds.add(project.id);
+            return true;
+          });
+          setProjects(validProjects);
+        } else {
+          console.error('A resposta da API não é um array:', allProjects);
+          showNotification('A resposta da API não é um array.', 'error');
+        }
+      } catch (error) {
         console.error('Erro ao obter projetos:', error);
         showNotification('Erro ao obter projetos.', 'error');
-      });
+      }
+    };
+    fetchProjects();
   }, []);
 
   const toggleMobileMenu = () => {
@@ -54,6 +63,7 @@ const App: React.FC = () => {
   const showNotification = (message: string, type: 'success' | 'error' | 'info' = 'info') => {
     const id = Date.now();
     setNotifications((prev) => [...prev, { id, message, type }]);
+    setTimeout(() => setNotifications((prev) => prev.filter(n => n.id !== id)), 3000);
   };
 
   const closeNotification = (id: number) => {
@@ -66,42 +76,31 @@ const App: React.FC = () => {
     setProjectModalOpen(true);
   };
 
-  const handleSaveProject = (name: string) => {
-    if (!name.trim()) {
-      showNotification('Por favor, insira o nome do projeto.', 'error');
-      return;
+  const handleSaveProject = async (name: string) => {
+    try {
+      if (editingProjectId) {
+        await ProjectService.updateProject(editingProjectId, name);
+        setProjects(prev => prev.map(project =>
+          project.id === editingProjectId ? { ...project, name } : project
+        ));
+        showNotification('Projeto atualizado com sucesso!', 'success');
+      } else {
+        const newProject = await ProjectService.createProject(name);
+        if (newProject.id === undefined || newProject.id === null) {
+          console.error('Projeto criado sem ID:', newProject);
+          showNotification('Erro ao criar projeto: ID inválido.', 'error');
+          return;
+        }
+        setProjects(prev => [...prev, newProject]);
+        setSelectedProjectId(newProject.id);
+        showNotification('Projeto criado com sucesso!', 'success');
+      }
+    } catch (error) {
+      console.error('Erro ao salvar projeto:', error);
+      showNotification('Erro ao salvar projeto.', 'error');
+    } finally {
+      setProjectModalOpen(false);
     }
-
-    if (editingProjectId) {
-      // atualizar projeto 
-      axios.put(`/projects/${editingProjectId}`, { id: editingProjectId, name })
-        .then(response => {
-          setProjects(prev =>
-            prev.map(project =>
-              project.id === editingProjectId ? response.data : project
-            )
-          );
-          showNotification('Projeto atualizado com sucesso!', 'success');
-        })
-        .catch(error => {
-          console.error('Erro ao atualizar projeto:', error);
-          showNotification('Erro ao atualizar projeto.', 'error');
-        });
-    } else {
-      //criar novo projeto
-      axios.post('/projects', { name })
-        .then(response => {
-          setProjects(prev => [...prev, response.data]);
-          setSelectedProjectId(response.data.id);
-          showNotification('Projeto criado com sucesso!', 'success');
-        })
-        .catch(error => {
-          console.error('Erro ao criar projeto:', error);
-          showNotification('Erro ao criar projeto.', 'error');
-        });
-    }
-
-    setProjectModalOpen(false);
   };
 
   const handleEditProject = (id: number) => {
@@ -109,19 +108,18 @@ const App: React.FC = () => {
     setProjectModalOpen(true);
   };
 
-  const handleDeleteProject = (id: number) => {
-    axios.delete(`/projects/${id}`)
-      .then(() => {
-        setProjects(prev => prev.filter(project => project.id !== id));
-        if (selectedProjectId === id) {
-          setSelectedProjectId(null);
-        }
-        showNotification('Projeto excluído.', 'info');
-      })
-      .catch(error => {
-        console.error('Erro ao excluir projeto:', error);
-        showNotification('Erro ao excluir projeto.', 'error');
-      });
+  const handleDeleteProject = async (id: number) => {
+    try {
+      await ProjectService.deleteProject(id);
+      setProjects(prev => prev.filter(p => p.id !== id));
+      if (selectedProjectId === id) {
+        setSelectedProjectId(null);
+      }
+      showNotification('Projeto excluído.', 'info');
+    } catch (error) {
+      console.error('Erro ao excluir projeto:', error);
+      showNotification('Erro ao excluir projeto.', 'error');
+    }
   };
 
   const handleSelectProject = (id: number) => {
@@ -134,59 +132,56 @@ const App: React.FC = () => {
     setTaskModalOpen(true);
   };
 
-  const handleSaveTask = ({ name, status }: { name: string; status: string }) => {
-    if (!name.trim()) {
-      showNotification('Por favor, insira o nome da tarefa.', 'error');
-      return;
-    }
-
+  const handleSaveTask = async (task: { name: string; status: string }) => {
     if (selectedProjectId === null) {
       showNotification('Nenhum projeto selecionado.', 'error');
       return;
     }
 
-    if (editingTaskId) {
-      // Atualizar tarefa existente
-      axios.put(`/projects/${selectedProjectId}/tasks/${editingTaskId}`, { id: editingTaskId, name, status })
-        .then(response => {
-          setProjects(prev =>
-            prev.map(project => {
-              if (project.id === selectedProjectId) {
-                const updatedTasks = project.tasks.map(task =>
-                  task.id === editingTaskId ? response.data : task
-                );
-                return { ...project, tasks: updatedTasks };
-              }
-              return project;
-            })
-          );
-          showNotification('Tarefa atualizada com sucesso!', 'success');
-        })
-        .catch(error => {
-          console.error('Erro ao atualizar tarefa:', error);
-          showNotification('Erro ao atualizar tarefa.', 'error');
-        });
-    } else {
-      // Criar nova tarefa
-      axios.post(`/projects/${selectedProjectId}/tasks`, { name, status })
-        .then(response => {
-          setProjects(prev =>
-            prev.map(project => {
-              if (project.id === selectedProjectId) {
-                return { ...project, tasks: [...project.tasks, response.data] };
-              }
-              return project;
-            })
-          );
-          showNotification('Tarefa criada com sucesso!', 'success');
-        })
-        .catch(error => {
-          console.error('Erro ao criar tarefa:', error);
-          showNotification('Erro ao criar tarefa.', 'error');
-        });
+    try {
+      if (editingTaskId) {
+        await TaskService.updateTask(selectedProjectId, editingTaskId, task.name, task.status);
+        setProjects(prev =>
+          prev.map(project => {
+            if (project.id === selectedProjectId) {
+              const updatedTasks = Array.isArray(project.tasks)
+                ? project.tasks.map(t =>
+                    t.id === editingTaskId ? { ...t, name: task.name, status: task.status } : t
+                  )
+                : [];
+              return { ...project, tasks: updatedTasks };
+            }
+            return project;
+          })
+        );
+        showNotification('Tarefa atualizada com sucesso!', 'success');
+      } else {
+        const newTask = await TaskService.createTask(selectedProjectId, task.name, task.status);
+        console.log('Nova Tarefa:', newTask);
+        if (newTask.id === undefined || newTask.id === null) {
+          console.error('Tarefa criada sem ID:', newTask);
+          showNotification('Erro ao criar tarefa: ID inválido.', 'error');
+          return;
+        }
+        setProjects(prev =>
+          prev.map(project => {
+            if (project.id === selectedProjectId) {
+              const updatedTasks = Array.isArray(project.tasks)
+                ? [...project.tasks, newTask]
+                : [newTask];
+              return { ...project, tasks: updatedTasks };
+            }
+            return project;
+          })
+        );
+        showNotification('Tarefa criada com sucesso!', 'success');
+      }
+    } catch (error) {
+      console.error('Erro ao salvar tarefa:', error);
+      showNotification('Erro ao salvar tarefa.', 'error');
+    } finally {
+      setTaskModalOpen(false);
     }
-
-    setTaskModalOpen(false);
   };
 
   const handleEditTask = (id: number) => {
@@ -194,38 +189,41 @@ const App: React.FC = () => {
     setTaskModalOpen(true);
   };
 
-  const handleDeleteTask = (id: number) => {
+  const handleDeleteTask = async (id: number) => {
     if (selectedProjectId === null) {
       showNotification('Nenhum projeto selecionado.', 'error');
       return;
     }
 
-    axios.delete(`/projects/${selectedProjectId}/tasks/${id}`)
-      .then(() => {
-        setProjects(prev =>
-          prev.map(project => {
-            if (project.id === selectedProjectId) {
-              return { ...project, tasks: project.tasks.filter(task => task.id !== id) };
-            }
-            return project;
-          })
-        );
-        showNotification('Tarefa excluída.', 'info');
-      })
-      .catch(error => {
-        console.error('Erro ao excluir tarefa:', error);
-        showNotification('Erro ao excluir tarefa.', 'error');
-      });
+    try {
+      await TaskService.deleteTask(selectedProjectId, id);
+      setProjects(prev =>
+        prev.map(project => {
+          if (project.id === selectedProjectId) {
+            const updatedTasks = Array.isArray(project.tasks)
+              ? project.tasks.filter(task => task.id !== id)
+              : [];
+            return { ...project, tasks: updatedTasks };
+          }
+          return project;
+        })
+      );
+      showNotification('Tarefa excluída.', 'info');
+    } catch (error) {
+      console.error('Erro ao excluir tarefa:', error);
+      showNotification('Erro ao excluir tarefa.', 'error');
+    }
   };
 
-  const selectedProject = projects.find((project) => project.id === selectedProjectId);
+  // Garantir que 'projects' é um array antes de usar 'find'
+  const selectedProject = Array.isArray(projects) ? projects.find((project) => project.id === selectedProjectId) : null;
 
   return (
     <div className="flex flex-col h-full bg-background font-sans">
       <Header toggleMobileMenu={toggleMobileMenu} />
       <MobileMenu isVisible={mobileMenuVisible} />
       <div className="flex flex-1 overflow-hidden">
-        <Sidebar
+        <Sidebar 
           projects={projects}
           selectedProjectId={selectedProjectId}
           onSelectProject={handleSelectProject}
@@ -242,11 +240,15 @@ const App: React.FC = () => {
                   + Nova Tarefa
                 </button>
               </div>
-              <TaskTable
-                tasks={selectedProject.tasks}
-                onEditTask={handleEditTask}
-                onDeleteTask={handleDeleteTask}
-              />
+              {Array.isArray(selectedProject.tasks) && selectedProject.tasks.length > 0 ? (
+                <TaskTable
+                  tasks={selectedProject.tasks}
+                  onEditTask={handleEditTask}
+                  onDeleteTask={handleDeleteTask}
+                />
+              ) : (
+                <p className="text-gray-600">Nenhuma tarefa encontrada.</p>
+              )}
             </>
           ) : (
             <div className="flex items-center justify-center h-full">
@@ -271,19 +273,21 @@ const App: React.FC = () => {
         onSave={handleSaveTask}
         initialTask={
           editingTaskId
-            ? selectedProject?.tasks.find((t) => t.id === editingTaskId)
+            ? Array.isArray(selectedProject?.tasks)
+              ? selectedProject.tasks.find((t) => t.id === editingTaskId)
+              : undefined
             : undefined
         }
       />
 
       {/* Notificações */}
       <div className="fixed top-4 right-4 z-50">
-        {notifications.map((notification) => (
+        {notifications.map((n) => (
           <Notification
-            key={notification.id}
-            message={notification.message}
-            type={notification.type}
-            onClose={() => closeNotification(notification.id)}
+            key={n.id}
+            message={n.message}
+            type={n.type}
+            onClose={() => closeNotification(n.id)}
           />
         ))}
       </div>

@@ -1,0 +1,145 @@
+/home/yagoaborba/DevTaskManager
+├── DevTaskManager.sln
+├── README.md
+├── backend
+│   ├── Controllers
+│   │   ├── ProjectsController.cs
+│   │   └── TasksController.cs
+│   ├── Data
+│   │   └── AppDbContext.cs
+│   ├── Debug
+│   │   └── net7.0
+│   │       ├── DevTaskManager
+│   │       ├── DevTaskManager.dll
+│   │       ├── DevTaskManager.pdb
+│   │       ├── Microsoft.AspNetCore.OpenApi.dll
+│   │       ├── Microsoft.OpenApi.dll
+│   │       ├── Swashbuckle.AspNetCore.Swagger.dll
+│   │       ├── Swashbuckle.AspNetCore.SwaggerGen.dll
+│   │       └── Swashbuckle.AspNetCore.SwaggerUI.dll
+│   ├── DevTaskManager.csproj
+│   ├── Migrations
+│   │   ├── 20240926175218_InitialCreate.Designer.cs
+│   │   ├── 20240926175218_InitialCreate.cs
+│   │   └── AppDbContextModelSnapshot.cs
+│   ├── Models
+│   │   ├── DevTaskManagerContext.cs
+│   │   ├── Project.cs
+│   │   ├── ProjectCreateDto.cs
+│   │   ├── Task.cs
+│   │   └── TaskCreateDto.cs
+│   ├── Program.cs
+│   ├── Services
+│   │   ├── IProjectService.cs
+│   │   ├── ITaskService.cs
+│   │   ├── ProjectService.cs
+│   │   ├── SomeService.cs
+│   │   └── TaskService.cs
+│   ├── Startup.cs
+│   ├── app.ts
+│   ├── config
+│   │   └── config.ts
+│   ├── devtaskmanager.db
+│   ├── middlewares
+│   │   └── errorHandler.ts
+│   ├── obj
+│   │   ├── Debug
+│   │   │   ├── net6.0
+│   │   │   │   ├── DevTaskManager.AssemblyInfo.cs
+│   │   │   │   ├── DevTaskManager.AssemblyInfoInputs.cache
+│   │   │   │   ├── DevTaskManager.GeneratedMSBuildEditorConfig.editorconfig
+│   │   │   │   ├── DevTaskManager.assets.cache
+│   │   │   │   └── DevTaskManager.csproj.AssemblyReference.cache
+│   │   │   ├── net7.0
+│   │   │   │   ├── DevTaskManager.AssemblyInfo.cs
+│   │   │   │   ├── DevTaskManager.AssemblyInfoInputs.cache
+│   │   │   │   ├── DevTaskManager.GeneratedMSBuildEditorConfig.editorconfig
+│   │   │   │   ├── DevTaskManager.GlobalUsings.g.cs
+│   │   │   │   ├── DevTaskManager.MvcApplicationPartsAssemblyInfo.cache
+│   │   │   │   ├── DevTaskManager.MvcApplicationPartsAssemblyInfo.cs
+│   │   │   │   ├── DevTaskManager.assets.cache
+│   │   │   │   ├── DevTaskManager.csproj.AssemblyReference.cache
+│   │   │   │   ├── DevTaskManager.csproj.CopyComplete
+│   │   │   │   ├── DevTaskManager.csproj.CoreCompileInputs.cache
+│   │   │   │   ├── DevTaskManager.csproj.FileListAbsolute.txt
+│   │   │   │   ├── DevTaskManager.dll
+│   │   │   │   ├── DevTaskManager.genruntimeconfig.cache
+│   │   │   │   ├── DevTaskManager.pdb
+│   │   │   │   ├── apphost
+│   │   │   │   ├── ref
+│   │   │   │   │   └── DevTaskManager.dll
+│   │   │   │   ├── refint
+│   │   │   │   │   └── DevTaskManager.dll
+│   │   │   │   └── staticwebassets
+│   │   │   │       ├── msbuild.build.DevTaskManager.props
+│   │   │   │       ├── msbuild.buildMultiTargeting.DevTaskManager.props
+│   │   │   │       └── msbuild.buildTransitive.DevTaskManager.props
+│   │   │   └── net8.0
+│   │   │       ├── DevTaskManager.AssemblyInfo.cs
+│   │   │       ├── DevTaskManager.AssemblyInfoInputs.cache
+│   │   │       ├── DevTaskManager.GeneratedMSBuildEditorConfig.editorconfig
+│   │   │       ├── DevTaskManager.GlobalUsings.g.cs
+│   │   │       ├── DevTaskManager.MvcApplicationPartsAssemblyInfo.cache
+│   │   │       ├── DevTaskManager.MvcApplicationPartsAssemblyInfo.cs
+│   │   │       ├── DevTaskManager.assets.cache
+│   │   │       ├── DevTaskManager.csproj.AssemblyReference.cache
+│   │   │       ├── DevTaskManager.csproj.CoreCompileInputs.cache
+│   │   │       ├── DevTaskManager.csproj.FileListAbsolute.txt
+│   │   │       └── apphost
+│   │   ├── DevTaskManager.csproj.EntityFrameworkCore.targets
+│   │   ├── DevTaskManager.csproj.nuget.g.props
+│   │   ├── DevTaskManager.csproj.nuget.g.targets
+│   │   └── project.nuget.cache
+│   ├── packages-microsoft-prod.deb
+│   ├── routes
+│   │   ├── projectRoutes.ts
+│   │   └── taskRoutes.ts
+│   ├── server.ts
+│   └── utils
+│       └── database.ts
+├── custom.d.ts
+├── estrutura_projeto.txt
+├── frontend
+│   ├── public
+│   │   └── vite.svg
+│   └── src
+│       ├── assets
+│       │   ├── icons
+│       │   │   ├── icon-128.png
+│       │   │   ├── icon-16.png
+│       │   │   └── icon-48.png
+│       │   └── react.svg
+│       ├── manifest.config.ts
+│       ├── pages
+│       │   ├── Panel
+│       │   │   ├── App.tsx
+│       │   │   ├── client.ts
+│       │   │   ├── components
+│       │   │   │   ├── Header.tsx
+│       │   │   │   ├── MobileMenu.tsx
+│       │   │   │   ├── Notification.tsx
+│       │   │   │   ├── ProjectModal.tsx
+│       │   │   │   ├── Sidebar.tsx
+│       │   │   │   ├── TaskModal.tsx
+│       │   │   │   └── TaskTable.tsx
+│       │   │   ├── index.html
+│       │   │   └── index.tsx
+│       │   ├── background
+│       │   │   └── index.ts
+│       │   ├── content
+│       │   │   └── index.ts
+│       │   └── styles
+│       │       ├── styles.css
+│       │       └── tailwind.css
+│       ├── services
+│       │   ├── ProjectService.ts
+│       │   └── TaskService.ts
+│       ├── types.d.ts
+│       └── vite-env.d.ts
+├── postcss.config.js
+├── tailwind.config.ts
+├── tsconfig.app.teste
+├── vite.config.ts
+└── vite.config.ts.timestamp-1722906679172.js
+
+32 directories, 110 files

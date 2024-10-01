@@ -8,10 +8,12 @@ namespace DevTaskManager.Models
     {
         [Required]
         [MaxLength(200)]
-        public required string Name { get; set; }
+        public string Name { get; set; } = string.Empty; // Inicializar com string vazia
 
         [Required]
         [MaxLength(50)]
-        public string Status { get; set; } = "A Fazer";
+        public string Status { get; set; } = "A Fazer"; // Inicializar com valor padrão
+
+        // Se necessário, inclua o ProjectId aqui, ou remova se não for usado
     }
 }

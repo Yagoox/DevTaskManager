@@ -55,7 +55,7 @@ namespace DevTaskManager.Migrations
 
                     b.HasIndex("ProjectId");
 
-                    b.ToTable("TaskItems");
+                    b.ToTable("Tasks");
                 });
 
             modelBuilder.Entity("DevTaskManager.Models.TaskItem", b =>

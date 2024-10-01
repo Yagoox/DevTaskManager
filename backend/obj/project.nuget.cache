@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "FfdoNAE/bP0=",
+  "dgSpecHash": "6H10rDDin+s=",
   "success": true,
   "projectFilePath": "/home/yagoaborba/DevTaskManager/backend/DevTaskManager.csproj",
   "expectedPackageFiles": [
@@ -26,6 +26,7 @@
     "/home/yagoaborba/.nuget/packages/microsoft.entityframeworkcore.sqlite/8.0.8/microsoft.entityframeworkcore.sqlite.8.0.8.nupkg.sha512",
     "/home/yagoaborba/.nuget/packages/microsoft.entityframeworkcore.sqlite.core/8.0.8/microsoft.entityframeworkcore.sqlite.core.8.0.8.nupkg.sha512",
     "/home/yagoaborba/.nuget/packages/microsoft.entityframeworkcore.sqlserver/8.0.8/microsoft.entityframeworkcore.sqlserver.8.0.8.nupkg.sha512",
+    "/home/yagoaborba/.nuget/packages/microsoft.entityframeworkcore.tools/8.0.8/microsoft.entityframeworkcore.tools.8.0.8.nupkg.sha512",
     "/home/yagoaborba/.nuget/packages/microsoft.extensions.apidescription.server/6.0.5/microsoft.extensions.apidescription.server.6.0.5.nupkg.sha512",
     "/home/yagoaborba/.nuget/packages/microsoft.extensions.caching.abstractions/8.0.0/microsoft.extensions.caching.abstractions.8.0.0.nupkg.sha512",
     "/home/yagoaborba/.nuget/packages/microsoft.extensions.caching.memory/8.0.0/microsoft.extensions.caching.memory.8.0.0.nupkg.sha512",
