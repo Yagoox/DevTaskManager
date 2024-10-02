@@ -1,221 +1,80 @@
 // frontend/src/pages/Panel/App.tsx
 
-import React, { useState, useEffect } from 'react';
-import ProjectService from '../../services/ProjectService';
-import TaskService from '../../services/TaskService';
+import React, { useState } from 'react';
 import Header from './components/Header';
 import Sidebar from './components/Sidebar';
 import TaskTable from './components/TaskTable';
 import ProjectModal from './components/ProjectModal';
 import TaskModal from './components/TaskModal';
 import Notification from './components/Notification';
-import { Project, NotificationType } from '../../types';
+import { NotificationType } from '../../types';
 import '@/pages/styles/tailwind.css';
 import MobileMenu from './components/MobileMenu'; 
+import useProjects from '../hooks/useProjects';
+import useTasks from '../hooks/useTasks';
 
 const App: React.FC = () => {
+  // Estado para controlar a visibilidade do menu mobile
   const [mobileMenuVisible, setMobileMenuVisible] = useState(false);
-  const [projects, setProjects] = useState<Project[]>([]);
-  const [selectedProjectId, setSelectedProjectId] = useState<number | null>(null);
-  const [projectModalOpen, setProjectModalOpen] = useState(false);
-  const [taskModalOpen, setTaskModalOpen] = useState(false);
-  const [editingProjectId, setEditingProjectId] = useState<number | null>(null);
-  const [editingTaskId, setEditingTaskId] = useState<number | null>(null);
+
+  // Estado para notificações
   const [notifications, setNotifications] = useState<NotificationType[]>([]);
 
-  useEffect(() => {
-    const fetchProjects = async () => {
-      try {
-        const allProjects = await ProjectService.getAllProjects();
-        console.log('Dados recebidos (projects):', allProjects);
-        if (Array.isArray(allProjects)) {
-          // Verificação de IDs únicos
-          const uniqueIds = new Set<number>();
-          const validProjects = allProjects.filter((project) => {
-            if (project.id === undefined || project.id === null) {
-              console.warn('Projeto sem ID:', project);
-              return false;
-            }
-            if (uniqueIds.has(project.id)) {
-              console.warn('ID duplicado de projeto encontrado:', project.id);
-              return false;
-            }
-            uniqueIds.add(project.id);
-            return true;
-          });
-          setProjects(validProjects);
-        } else {
-          console.error('A resposta da API não é um array:', allProjects);
-          showNotification('A resposta da API não é um array.', 'error');
-        }
-      } catch (error) {
-        console.error('Erro ao obter projetos:', error);
-        showNotification('Erro ao obter projetos.', 'error');
-      }
-    };
-    fetchProjects();
-  }, []);
-
-  const toggleMobileMenu = () => {
-    setMobileMenuVisible(!mobileMenuVisible);
-  };
-
+  /**
+   * Função para exibir notificações
+   */
   const showNotification = (message: string, type: 'success' | 'error' | 'info' = 'info') => {
     const id = Date.now();
     setNotifications((prev) => [...prev, { id, message, type }]);
     setTimeout(() => setNotifications((prev) => prev.filter(n => n.id !== id)), 3000);
   };
 
+  /**
+   * Função para fechar uma notificação específica
+   */
   const closeNotification = (id: number) => {
     setNotifications((prev) => prev.filter((n) => n.id !== id));
   };
 
-  // Funções relacionadas a projetos
-  const handleAddProject = () => {
-    setEditingProjectId(null);
-    setProjectModalOpen(true);
+  // Utilizando o hook useProjects
+  const {
+    projects,
+    selectedProjectId,
+    projectModalOpen,
+    setProjectModalOpen,
+    editingProjectId,
+    handleAddProject,
+    handleEditProject,
+    handleDeleteProject,
+    handleSaveProject,
+    handleSelectProject,
+    setProjects,
+  } = useProjects({ showNotification });
+
+  // Utilizando o hook useTasks
+  const {
+    taskModalOpen,
+    editingTaskId,
+    setTaskModalOpen,
+    handleAddTask,
+    handleEditTask,
+    handleDeleteTask,
+    handleSaveTask,
+  } = useTasks({
+    selectedProjectId,
+    projects,
+    setProjects,
+    showNotification,
+  });
+
+  /**
+   * Função para alternar a visibilidade do menu mobile
+   */
+  const toggleMobileMenu = () => {
+    setMobileMenuVisible(!mobileMenuVisible);
   };
 
-  const handleSaveProject = async (name: string) => {
-    try {
-      if (editingProjectId) {
-        await ProjectService.updateProject(editingProjectId, name);
-        setProjects(prev => prev.map(project =>
-          project.id === editingProjectId ? { ...project, name } : project
-        ));
-        showNotification('Projeto atualizado com sucesso!', 'success');
-      } else {
-        const newProject = await ProjectService.createProject(name);
-        if (newProject.id === undefined || newProject.id === null) {
-          console.error('Projeto criado sem ID:', newProject);
-          showNotification('Erro ao criar projeto: ID inválido.', 'error');
-          return;
-        }
-        setProjects(prev => [...prev, newProject]);
-        setSelectedProjectId(newProject.id);
-        showNotification('Projeto criado com sucesso!', 'success');
-      }
-    } catch (error) {
-      console.error('Erro ao salvar projeto:', error);
-      showNotification('Erro ao salvar projeto.', 'error');
-    } finally {
-      setProjectModalOpen(false);
-    }
-  };
-
-  const handleEditProject = (id: number) => {
-    setEditingProjectId(id);
-    setProjectModalOpen(true);
-  };
-
-  const handleDeleteProject = async (id: number) => {
-    try {
-      await ProjectService.deleteProject(id);
-      setProjects(prev => prev.filter(p => p.id !== id));
-      if (selectedProjectId === id) {
-        setSelectedProjectId(null);
-      }
-      showNotification('Projeto excluído.', 'info');
-    } catch (error) {
-      console.error('Erro ao excluir projeto:', error);
-      showNotification('Erro ao excluir projeto.', 'error');
-    }
-  };
-
-  const handleSelectProject = (id: number) => {
-    setSelectedProjectId(id);
-  };
-
-  // Funções relacionadas a tarefas
-  const handleAddTask = () => {
-    setEditingTaskId(null);
-    setTaskModalOpen(true);
-  };
-
-  const handleSaveTask = async (task: { name: string; status: string }) => {
-    if (selectedProjectId === null) {
-      showNotification('Nenhum projeto selecionado.', 'error');
-      return;
-    }
-
-    try {
-      if (editingTaskId) {
-        await TaskService.updateTask(selectedProjectId, editingTaskId, task.name, task.status);
-        setProjects(prev =>
-          prev.map(project => {
-            if (project.id === selectedProjectId) {
-              const updatedTasks = Array.isArray(project.tasks)
-                ? project.tasks.map(t =>
-                    t.id === editingTaskId ? { ...t, name: task.name, status: task.status } : t
-                  )
-                : [];
-              return { ...project, tasks: updatedTasks };
-            }
-            return project;
-          })
-        );
-        showNotification('Tarefa atualizada com sucesso!', 'success');
-      } else {
-        const newTask = await TaskService.createTask(selectedProjectId, task.name, task.status);
-        console.log('Nova Tarefa:', newTask);
-        if (newTask.id === undefined || newTask.id === null) {
-          console.error('Tarefa criada sem ID:', newTask);
-          showNotification('Erro ao criar tarefa: ID inválido.', 'error');
-          return;
-        }
-        setProjects(prev =>
-          prev.map(project => {
-            if (project.id === selectedProjectId) {
-              const updatedTasks = Array.isArray(project.tasks)
-                ? [...project.tasks, newTask]
-                : [newTask];
-              return { ...project, tasks: updatedTasks };
-            }
-            return project;
-          })
-        );
-        showNotification('Tarefa criada com sucesso!', 'success');
-      }
-    } catch (error) {
-      console.error('Erro ao salvar tarefa:', error);
-      showNotification('Erro ao salvar tarefa.', 'error');
-    } finally {
-      setTaskModalOpen(false);
-    }
-  };
-
-  const handleEditTask = (id: number) => {
-    setEditingTaskId(id);
-    setTaskModalOpen(true);
-  };
-
-  const handleDeleteTask = async (id: number) => {
-    if (selectedProjectId === null) {
-      showNotification('Nenhum projeto selecionado.', 'error');
-      return;
-    }
-
-    try {
-      await TaskService.deleteTask(selectedProjectId, id);
-      setProjects(prev =>
-        prev.map(project => {
-          if (project.id === selectedProjectId) {
-            const updatedTasks = Array.isArray(project.tasks)
-              ? project.tasks.filter(task => task.id !== id)
-              : [];
-            return { ...project, tasks: updatedTasks };
-          }
-          return project;
-        })
-      );
-      showNotification('Tarefa excluída.', 'info');
-    } catch (error) {
-      console.error('Erro ao excluir tarefa:', error);
-      showNotification('Erro ao excluir tarefa.', 'error');
-    }
-  };
-
-  // Garantir que 'projects' é um array antes de usar 'find'
+  // Encontrar o projeto selecionado (se houver)
   const selectedProject = Array.isArray(projects) ? projects.find((project) => project.id === selectedProjectId) : null;
 
   return (
