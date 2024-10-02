@@ -33,7 +33,7 @@ export default defineConfig({
     },
     proxy: { // Adicione esta seção para configurar o proxy
       '/api': {
-        target: 'http://localhost:5146', // URL do backend
+        target: 'http://127.0.0.1:5146', // URL do backend
         changeOrigin: true,
         secure: false,
       },

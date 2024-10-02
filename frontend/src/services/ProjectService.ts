@@ -3,6 +3,12 @@
 import axios from 'axios';
 import { Project } from '../types';
 
+// Cria uma instância do axios com a baseURL configurada
+const api = axios.create({
+  baseURL: 'http://127.0.0.1:5146'  // Defina aqui a base URL da sua API
+});
+
+
 class ProjectService {
   /**
    * Obtém todos os projetos da API.
@@ -10,7 +16,8 @@ class ProjectService {
    */
   async getAllProjects(): Promise<Project[]> {
     try {
-      const response = await axios.get('/api/projects');
+      const response = await api.get('/api/projects');
+      console.log('URL usada na requisição:', response.config.url);
       console.log('Resposta da API (getAllProjects):', response.data);
 
       if (Array.isArray(response.data)) {
@@ -35,7 +42,8 @@ class ProjectService {
    */
   async createProject(name: string): Promise<Project> {
     try {
-      const response = await axios.post('/api/projects', { name }); // Caminho relativo via proxy
+      const response = await api.post('/api/projects', { name }); // Caminho relativo via proxy
+      console.log('URL usada na requisição:', response.config.url);
       console.log('Projeto criado:', response.data);
       
       // Verifica se a resposta é um objeto de projeto direto
@@ -63,7 +71,7 @@ class ProjectService {
    */
   async updateProject(id: number, name: string): Promise<void> {
     try {
-      await axios.put(`/api/projects/${id}`, { name }); // Caminho relativo via proxy
+      await api.put(`/api/projects/${id}`, { name }); // Caminho relativo via proxy
       console.log(`Projeto ${id} atualizado.`);
     } catch (error) {
       console.error('Erro na chamada updateProject:', error);
@@ -78,7 +86,7 @@ class ProjectService {
    */
   async deleteProject(id: number): Promise<void> {
     try {
-      await axios.delete(`/api/projects/${id}`); // Caminho relativo via proxy
+      await api.delete(`/api/projects/${id}`); // Caminho relativo via proxy
       console.log(`Projeto ${id} deletado.`);
     } catch (error) {
       console.error('Erro na chamada deleteProject:', error);

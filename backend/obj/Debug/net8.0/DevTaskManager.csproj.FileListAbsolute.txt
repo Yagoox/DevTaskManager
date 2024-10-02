@@ -1,9 +1,5 @@
 /home/yagoaborba/DevTaskManager/backend/bin/Debug/net8.0/appsettings.Development.json
 /home/yagoaborba/DevTaskManager/backend/bin/Debug/net8.0/appsettings.json
-/home/yagoaborba/DevTaskManager/backend/bin/Debug/net8.0/Debug/net7.0/appsettings.Development.json
-/home/yagoaborba/DevTaskManager/backend/bin/Debug/net8.0/Debug/net7.0/appsettings.json
-/home/yagoaborba/DevTaskManager/backend/bin/Debug/net8.0/Debug/net7.0/DevTaskManager.deps.json
-/home/yagoaborba/DevTaskManager/backend/bin/Debug/net8.0/Debug/net7.0/DevTaskManager.runtimeconfig.json
 /home/yagoaborba/DevTaskManager/backend/bin/Debug/net8.0/DevTaskManager
 /home/yagoaborba/DevTaskManager/backend/bin/Debug/net8.0/DevTaskManager.deps.json
 /home/yagoaborba/DevTaskManager/backend/bin/Debug/net8.0/DevTaskManager.runtimeconfig.json
@@ -165,3 +161,11 @@
 /home/yagoaborba/DevTaskManager/backend/obj/Debug/net8.0/DevTaskManager.pdb
 /home/yagoaborba/DevTaskManager/backend/obj/Debug/net8.0/DevTaskManager.genruntimeconfig.cache
 /home/yagoaborba/DevTaskManager/backend/obj/Debug/net8.0/ref/DevTaskManager.dll
+/home/yagoaborba/DevTaskManager/backend/bin/Debug/net8.0/config/Debug/net8.0/appsettings.Development.json
+/home/yagoaborba/DevTaskManager/backend/bin/Debug/net8.0/config/Debug/net8.0/appsettings.json
+/home/yagoaborba/DevTaskManager/backend/bin/Debug/net8.0/config/Debug/net8.0/Debug/net7.0/appsettings.Development.json
+/home/yagoaborba/DevTaskManager/backend/bin/Debug/net8.0/config/Debug/net8.0/Debug/net7.0/appsettings.json
+/home/yagoaborba/DevTaskManager/backend/bin/Debug/net8.0/config/Debug/net8.0/Debug/net7.0/DevTaskManager.deps.json
+/home/yagoaborba/DevTaskManager/backend/bin/Debug/net8.0/config/Debug/net8.0/Debug/net7.0/DevTaskManager.runtimeconfig.json
+/home/yagoaborba/DevTaskManager/backend/bin/Debug/net8.0/config/Debug/net8.0/DevTaskManager.deps.json
+/home/yagoaborba/DevTaskManager/backend/bin/Debug/net8.0/config/Debug/net8.0/DevTaskManager.runtimeconfig.json

@@ -1,6 +1,6 @@
 // frontend/src/pages/Panel/App.tsx
 
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import Header from './components/Header';
 import Sidebar from './components/Sidebar';
 import TaskTable from './components/TaskTable';
@@ -21,20 +21,28 @@ const App: React.FC = () => {
   const [notifications, setNotifications] = useState<NotificationType[]>([]);
 
   /**
-   * Função para exibir notificações
+   * Função para exibir notificações, memoizada para evitar recriação em cada renderização.
+   *
+   * @param message - Mensagem a ser exibida na notificação.
+   * @param type - Tipo da notificação ('success', 'error', 'info'). Padrão: 'info'.
    */
-  const showNotification = (message: string, type: 'success' | 'error' | 'info' = 'info') => {
-    const id = Date.now();
-    setNotifications((prev) => [...prev, { id, message, type }]);
-    setTimeout(() => setNotifications((prev) => prev.filter(n => n.id !== id)), 3000);
-  };
+  const showNotification = useCallback(
+    (message: string, type: 'success' | 'error' | 'info' = 'info') => {
+      const id = Date.now();
+      setNotifications((prev) => [...prev, { id, message, type }]);
+      setTimeout(() => setNotifications((prev) => prev.filter(n => n.id !== id)), 3000);
+    },
+    [] // Dependências vazias, pois setNotifications é estável.
+  );
 
   /**
-   * Função para fechar uma notificação específica
+   * Função para fechar uma notificação específica, memoizada para evitar recriação em cada renderização.
+   *
+   * @param id - ID da notificação a ser fechada.
    */
-  const closeNotification = (id: number) => {
+  const closeNotification = useCallback((id: number) => {
     setNotifications((prev) => prev.filter((n) => n.id !== id));
-  };
+  }, []);
 
   // Utilizando o hook useProjects
   const {
@@ -68,10 +76,10 @@ const App: React.FC = () => {
   });
 
   /**
-   * Função para alternar a visibilidade do menu mobile
+   * Função para alternar a visibilidade do menu mobile.
    */
   const toggleMobileMenu = () => {
-    setMobileMenuVisible(!mobileMenuVisible);
+    setMobileMenuVisible((prev) => !prev);
   };
 
   // Encontrar o projeto selecionado (se houver)

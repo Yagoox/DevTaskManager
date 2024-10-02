@@ -34,5 +34,11 @@ export default defineManifest(async () => ({
         resources: ["frontend/src/pages/Panel/index.html*"],
         matches: ["http://*/*", "https://*/*"],
         use_dynamic_url: true
-    }]
+    }],
+    host_permissions: [
+        "http://localhost:5146/*",
+        "https://localhost:5146/*",
+        "http://127.0.0.1:5146/*",
+        "https://127.0.0.1:5146/*"
+        ]
 }));

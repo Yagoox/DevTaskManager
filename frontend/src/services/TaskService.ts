@@ -3,6 +3,10 @@
 import axios from 'axios';
 import { Task } from '../types';
 
+const api = axios.create({
+  baseURL: 'http://127.0.0.1:5146'  // Defina aqui a base URL da sua API
+});
+
 class TaskService {
   /**
    * Cria uma nova tarefa na API.
@@ -13,7 +17,7 @@ class TaskService {
    */
   async createTask(projectId: number, name: string, status: string): Promise<Task> {
     try {
-      const response = await axios.post(`/api/projects/${projectId}/tasks`, {
+      const response = await api.post(`/api/projects/${projectId}/tasks`, {
         name,
         status,
       });
@@ -43,7 +47,7 @@ class TaskService {
    */
   async updateTask(projectId: number, taskId: number, name: string, status: string): Promise<void> {
     try {
-      await axios.put(`/api/projects/${projectId}/tasks/${taskId}`, { name, status }); // Caminho relativo via proxy
+      await api.put(`/api/projects/${projectId}/tasks/${taskId}`, { name, status }); // Caminho relativo via proxy
       console.log(`Tarefa ${taskId} atualizada no projeto ${projectId}.`);
     } catch (error) {
       console.error('Erro na chamada updateTask:', error);
@@ -59,7 +63,7 @@ class TaskService {
    */
   async deleteTask(projectId: number, taskId: number): Promise<void> {
     try {
-      await axios.delete(`/api/projects/${projectId}/tasks/${taskId}`); // Caminho relativo via proxy
+      await api.delete(`/api/projects/${projectId}/tasks/${taskId}`); // Caminho relativo via proxy
       console.log(`Tarefa ${taskId} deletada do projeto ${projectId}.`);
     } catch (error) {
       console.error('Erro na chamada deleteTask:', error);
@@ -75,7 +79,7 @@ class TaskService {
    */
   async getTaskById(projectId: number, taskId: number): Promise<Task> {
     try {
-      const response = await axios.get(`/api/projects/${projectId}/tasks/${taskId}`);
+      const response = await api.get(`/api/projects/${projectId}/tasks/${taskId}`);
       console.log('Tarefa obtida:', response.data);
 
       if (response.data && typeof response.data === 'object') {
