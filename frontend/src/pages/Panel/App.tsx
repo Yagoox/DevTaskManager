@@ -1,4 +1,4 @@
-// frontend/src/pages/Panel/App.tsx
+// src/pages/Panel/App.tsx
 
 import React, { useState, useCallback } from 'react';
 import Header from './components/Header';
@@ -9,9 +9,10 @@ import TaskModal from './components/TaskModal';
 import Notification from './components/Notification';
 import { NotificationType } from '../../types';
 import '@/pages/styles/tailwind.css';
-import MobileMenu from './components/MobileMenu'; 
+import MobileMenu from './components/MobileMenu';
 import useProjects from '../hooks/useProjects';
 import useTasks from '../hooks/useTasks';
+import AnimatedGradient from './components/AnimatedGradient'; // Importação correta
 
 const App: React.FC = () => {
   // Estado para controlar a visibilidade do menu mobile
@@ -20,26 +21,15 @@ const App: React.FC = () => {
   // Estado para notificações
   const [notifications, setNotifications] = useState<NotificationType[]>([]);
 
-  /**
-   * Função para exibir notificações, memoizada para evitar recriação em cada renderização.
-   *
-   * @param message - Mensagem a ser exibida na notificação.
-   * @param type - Tipo da notificação ('success', 'error', 'info'). Padrão: 'info'.
-   */
   const showNotification = useCallback(
     (message: string, type: 'success' | 'error' | 'info' = 'info') => {
       const id = Date.now();
       setNotifications((prev) => [...prev, { id, message, type }]);
-      setTimeout(() => setNotifications((prev) => prev.filter(n => n.id !== id)), 3000);
+      setTimeout(() => setNotifications((prev) => prev.filter((n) => n.id !== id)), 3000);
     },
-    [] // Dependências vazias, pois setNotifications é estável.
+    []
   );
 
-  /**
-   * Função para fechar uma notificação específica, memoizada para evitar recriação em cada renderização.
-   *
-   * @param id - ID da notificação a ser fechada.
-   */
   const closeNotification = useCallback((id: number) => {
     setNotifications((prev) => prev.filter((n) => n.id !== id));
   }, []);
@@ -75,88 +65,98 @@ const App: React.FC = () => {
     showNotification,
   });
 
-  /**
-   * Função para alternar a visibilidade do menu mobile.
-   */
+  // Função para alternar a visibilidade do menu mobile.
   const toggleMobileMenu = () => {
     setMobileMenuVisible((prev) => !prev);
   };
 
   // Encontrar o projeto selecionado (se houver)
-  const selectedProject = Array.isArray(projects) ? projects.find((project) => project.id === selectedProjectId) : null;
+  const selectedProject = Array.isArray(projects)
+    ? projects.find((project) => project.id === selectedProjectId)
+    : null;
 
   return (
-    <div className="flex flex-col h-full bg-background font-sans">
-      <Header toggleMobileMenu={toggleMobileMenu} />
-      <MobileMenu isVisible={mobileMenuVisible} />
-      <div className="flex flex-1 overflow-hidden">
-        <Sidebar 
-          projects={projects}
-          selectedProjectId={selectedProjectId}
-          onSelectProject={handleSelectProject}
-          onAddProject={handleAddProject}
-          onEditProject={handleEditProject}
-          onDeleteProject={handleDeleteProject}
-        />
-        <main className="flex-1 overflow-auto p-6">
-          {selectedProject ? (
-            <>
-              <div className="flex items-center justify-between mb-6">
-                <h2 className="text-2xl font-semibold text-gray-800">{selectedProject.name}</h2>
-                <button onClick={handleAddTask} className="btn btn-primary">
-                  + Nova Tarefa
-                </button>
-              </div>
-              {Array.isArray(selectedProject.tasks) && selectedProject.tasks.length > 0 ? (
-                <TaskTable
-                  tasks={selectedProject.tasks}
-                  onEditTask={handleEditTask}
-                  onDeleteTask={handleDeleteTask}
-                />
-              ) : (
-                <p className="text-gray-600">Nenhuma tarefa encontrada.</p>
-              )}
-            </>
-          ) : (
-            <div className="flex items-center justify-center h-full">
-              <p className="text-gray-600 text-lg">Selecione um projeto ou adicione um novo.</p>
-            </div>
-          )}
-        </main>
-      </div>
+    <div className="relative flex flex-col h-screen bg-background overflow-hidden">
+      <AnimatedGradient />
 
-      {/* Modais */}
-      <ProjectModal
-        isOpen={projectModalOpen}
-        onClose={() => setProjectModalOpen(false)}
-        onSave={handleSaveProject}
-        initialName={
-          editingProjectId ? projects.find((p) => p.id === editingProjectId)?.name : undefined
-        }
-      />
-      <TaskModal
-        isOpen={taskModalOpen}
-        onClose={() => setTaskModalOpen(false)}
-        onSave={handleSaveTask}
-        initialTask={
-          editingTaskId
-            ? Array.isArray(selectedProject?.tasks)
-              ? selectedProject.tasks.find((t) => t.id === editingTaskId)
-              : undefined
-            : undefined
-        }
-      />
-
-      {/* Notificações */}
-      <div className="fixed top-4 right-4 z-50">
-        {notifications.map((n) => (
-          <Notification
-            key={n.id}
-            message={n.message}
-            type={n.type}
-            onClose={() => closeNotification(n.id)}
+      <div className="relative z-10 flex flex-col h-full">
+        <Header toggleMobileMenu={toggleMobileMenu} />
+        <MobileMenu isVisible={mobileMenuVisible} />
+        <main className="flex-1 grid grid-cols-[250px_1fr] gap-6 p-6">
+          <Sidebar
+            projects={projects}
+            selectedProjectId={selectedProjectId}
+            onSelectProject={handleSelectProject}
+            onAddProject={handleAddProject}
+            onEditProject={handleEditProject}
+            onDeleteProject={handleDeleteProject}
           />
-        ))}
+          <div className="bg-surface rounded-lg shadow-lg p-4 flex flex-col">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-lg font-bold text-textPrimary">Tasks</h2>
+              <button
+              onClick={handleAddTask}
+              className="inline-flex items-center justify-center rounded-md text-sm font-medium bg-primary text-primary-foreground hover:bg-primary-hover focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 w-10" // Alterado de bg-accent para bg-primary
+              aria-label="Adicionar Tarefa"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="w-5 h-5"
+              >
+                <path d="M5 12h14"></path>
+                <path d="M12 5v14"></path>
+              </svg>
+            </button>
+            </div>
+            <TaskTable
+              tasks={selectedProject?.tasks || []}
+              onEditTask={handleEditTask}
+              onDeleteTask={handleDeleteTask}
+            />
+          </div>
+        </main>
+
+        {/* Modais */}
+        <ProjectModal
+          isOpen={projectModalOpen}
+          onClose={() => setProjectModalOpen(false)}
+          onSave={handleSaveProject}
+          initialName={
+            editingProjectId ? projects.find((p) => p.id === editingProjectId)?.name : undefined
+          }
+        />
+        <TaskModal
+          isOpen={taskModalOpen}
+          onClose={() => setTaskModalOpen(false)}
+          onSave={handleSaveTask}
+          initialTask={
+            editingTaskId
+              ? Array.isArray(selectedProject?.tasks)
+                ? selectedProject.tasks.find((t) => t.id === editingTaskId)
+                : undefined
+              : undefined
+          }
+        />
+
+        {/* Notificações */}
+        <div className="fixed top-4 right-4 z-50">
+          {notifications.map((n) => (
+            <Notification
+              key={n.id}
+              message={n.message}
+              type={n.type}
+              onClose={() => closeNotification(n.id)}
+            />
+          ))}
+        </div>
       </div>
     </div>
   );

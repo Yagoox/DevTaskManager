@@ -1,7 +1,7 @@
-// frontend/src/pages/Panel/components/TaskModal.tsx
+// src/pages/Panel/components/TaskModal.tsx
 
 import React, { useState, useEffect } from 'react';
-import { Task } from '../../../types'; 
+import { Task } from '../../../types';
 
 interface TaskModalProps {
   isOpen: boolean;
@@ -12,48 +12,49 @@ interface TaskModalProps {
 
 const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose, onSave, initialTask }) => {
   const [name, setName] = useState('');
-  const [status, setStatus] = useState('A Fazer');
+  const [status, setStatus] = useState<'A Fazer' | 'Em Progresso' | 'Concluída'>('A Fazer');
 
   useEffect(() => {
     if (initialTask) {
       setName(initialTask.name);
-      setStatus(initialTask.status);
+      setStatus(initialTask.status as 'A Fazer' | 'Em Progresso' | 'Concluída');
     } else {
       setName('');
       setStatus('A Fazer');
     }
   }, [initialTask]);
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    onSave({ name, status });
-  };
-
   if (!isOpen) return null;
 
   return (
     <div className="modal-overlay">
       <div className="modal-content">
-        <h2 className="text-xl font-semibold mb-4">
+        <h2 className="text-xl font-bold text-textPrimary mb-4">
           {initialTask ? 'Editar Tarefa' : 'Nova Tarefa'}
         </h2>
-        <form onSubmit={handleSubmit}>
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            onSave({ name, status });
+          }}
+        >
           <div className="mb-4">
-            <label className="block text-sm font-medium mb-1">Nome</label>
+            <label className="block text-sm font-medium text-textPrimary mb-1">Nome</label>
             <input
               type="text"
-              className="input"
+              placeholder="Nome da Tarefa"
+              className="input mb-2"
               value={name}
               onChange={(e) => setName(e.target.value)}
               required
             />
           </div>
           <div className="mb-6">
-            <label className="block text-sm font-medium mb-1">Status</label>
+            <label className="block text-sm font-medium text-textPrimary mb-1">Status</label>
             <select
               className="input"
               value={status}
-              onChange={(e) => setStatus(e.target.value)}
+              onChange={(e) => setStatus(e.target.value as 'A Fazer' | 'Em Progresso' | 'Concluída')}
             >
               <option value="A Fazer">A Fazer</option>
               <option value="Em Progresso">Em Progresso</option>

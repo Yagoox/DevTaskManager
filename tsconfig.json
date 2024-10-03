@@ -13,13 +13,13 @@
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "noEmit": false,
-    "jsx": "react-jsx", // Ajuste recomendado para JSX moderno
+    "jsx": "react-jsx", 
     "outDir": "./dist",
     "baseUrl": "./",
     "paths": {
       "@/components/*": ["frontend/src/pages/components/*"],
       "@/lib/*": ["frontend/src/lib/*"],
-      "@/types": ["frontend/src/types.d.ts"] // Adicione o alias para tipos
+      "@/types": ["frontend/src/types.d.ts"] 
     }
   },
   "include": ["frontend/src"],

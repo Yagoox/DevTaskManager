@@ -3,37 +3,84 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Estilos personalizados */
+
 @layer components {
-    .btn {
-      @apply inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md font-medium shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 transition duration-150 ease-in-out;
+  @keyframes gradientBG {
+    0% {
+      background-position: 0% 50%;
     }
-  
-    .btn-primary {
-      @apply bg-primary text-white hover:bg-blue-600 focus:ring-primary;
+    50% {
+      background-position: 100% 50%;
     }
-  
-    .btn-secondary {
-      @apply bg-secondary text-white hover:bg-indigo-600 focus:ring-secondary;
-    }
-  
-    .input {
-      @apply block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm;
-    }
-  
-    .modal-overlay {
-      @apply fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50;
-    }
-  
-    .modal-content {
-      @apply bg-surface rounded-lg p-6 w-full max-w-md shadow-lg;
-    }
-  
-    .notification {
-      @apply flex items-center p-4 mb-4 rounded-md shadow-md bg-white animate-fade-in;
-      @apply fixed left-[50%] transform -translate-x-[50%] top-[5rem]; /* Ajuste conforme a altura do cabeçalho */
+    100% {
+      background-position: 0% 50%;
     }
   }
+}
+  .animated-gradient {
+    background: linear-gradient(-45deg, 
+      rgba(107, 33, 168, 0.4),
+      rgba(59, 130, 246, 0.4), 
+      rgba(16, 185, 129, 0.4), 
+      rgba(249, 115, 22, 0.4)  
+    );
+    background-size: 400% 400%;
+    animation: gradientBG 30s ease infinite;
+    opacity: 0.5;
+}
+
+@layer components {
+  .btn {
+    @apply inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md font-medium shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 transition duration-150 ease-in-out;
+  }
+
+  .btn-primary {
+    @apply bg-primary text-primary-foreground hover:bg-primary-hover focus:ring-primary;
+  }
+
+  .btn-secondary {
+    @apply bg-secondary text-secondary-foreground hover:bg-secondary-hover focus:ring-secondary;
+  }
+
+  .input {
+    @apply block w-full px-3 py-2 border border-input rounded-md placeholder-gray-400 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm;
+  }
+
+  .modal-overlay {
+    @apply fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50;
+  }
+
+  .modal-content {
+    @apply bg-surface rounded-lg p-6 w-full max-w-md shadow-lg;
+  }
+
+  .notification {
+    @apply flex items-center p-4 mb-4 rounded-md shadow-md bg-white animate-fade-in fixed left-1/2 transform -translate-x-1/2 top-20;
+  }
+
+  /* **Novas Classes para Status das Tarefas** */
+  .status-label {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium capitalize;
+  }
+
+  .status-todo {
+    background-color: rgba(168, 85, 247, 0.2); /* Roxo com 20% opacity */
+    color: #A855F7; /* Roxo */
+    border: 1px solid rgba(168, 85, 247, 0.5); /* Roxo com 50% opacity */
+  }
+
+  .status-inProgress {
+    background-color: rgba(249, 115, 22, 0.2); /* Laranja com 20% opacity */
+    color: #F97316; /* Laranja */
+    border: 1px solid rgba(249, 115, 22, 0.5); /* Laranja com 50% opacity */
+  }
+
+  .status-completed {
+    background-color: rgba(16, 185, 129, 0.2); /* Verde com 20% opacity */
+    color: #10B981; /* Verde */
+    border: 1px solid rgba(16, 185, 129, 0.5); /* Verde com 50% opacity */
+  }
+}
 
 @keyframes fade-in {
   from {
@@ -48,4 +95,33 @@
 
 .animate-fade-in {
   animation: fade-in 0.3s ease-out forwards;
+}
+
+:root {
+  --background: 0, 0%, 100%; /* Branco */
+  --foreground: 222.2, 84%, 4.9%; /* Cinza Escuro */
+
+  --primary: 221.2, 83.2%, 53.3%; /* Azul */
+  --primary-foreground: 210, 40%, 98%; /* Quase Branco */
+  --primary-hover: 221.2, 83.2%, 60%; /* Azul Claro */
+
+  --secondary: 210, 40%, 96.1%; /* Azul Claro */
+  --secondary-foreground: 222.2, 47.4%, 11.2%; /* Cinza Escuro */
+  --secondary-hover: 210, 40%, 90%; /* Azul Médio */
+
+  --surface: 0, 0%, 100%; /* Branco */
+  --input: 214.3, 31.8%, 91.4%; /* Cinza Claro para Inputs */
+
+  --textPrimary: 222.2, 84%, 4.9%; /* Cinza Muito Escuro */
+  --textSecondary: 222.2, 47.4%, 11.2%; /* Cinza Escuro */
+
+  --accent: 164, 63%, 45%; /* Verde */
+  --accent-foreground: 210, 40%, 98%; /* Quase Branco */
+
+  --error: 0, 72%, 51%; /* Vermelho */
+  --error-foreground: 210, 40%, 98%; /* Quase Branco */
+}
+
+body {
+  font-family: 'Inter', sans-serif;
 }

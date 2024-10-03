@@ -1,0 +1,156 @@
+/* src/pages/Panel/components/AnimatedLogo.css */
+
+/* Keyframes ajustados para o novo tamanho de 32px */
+@keyframes square-animation {
+    0% {
+      left: 0;
+      top: 0;
+    }
+  
+    10.5% {
+      left: 0;
+      top: 0;
+    }
+  
+    12.5% {
+      left: 10.6667px; /* Reduzido proporcionalmente de 16px para ~10.6667px */
+      top: 0;
+    }
+  
+    23% {
+      left: 10.6667px;
+      top: 0;
+    }
+  
+    25% {
+      left: 21.3333px; /* Reduzido proporcionalmente de 32px para ~21.3333px */
+      top: 0;
+    }
+  
+    35.5% {
+      left: 21.3333px;
+      top: 0;
+    }
+  
+    37.5% {
+      left: 21.3333px;
+      top: 10.6667px; /* Reduzido proporcionalmente de 16px para ~10.6667px */
+    }
+  
+    48% {
+      left: 21.3333px;
+      top: 10.6667px;
+    }
+  
+    50% {
+      left: 10.6667px; /* Reduzido proporcionalmente de 16px para ~10.6667px */
+      top: 10.6667px; /* Reduzido proporcionalmente de 16px para ~10.6667px */
+    }
+  
+    60.5% {
+      left: 10.6667px;
+      top: 10.6667px;
+    }
+  
+    62.5% {
+      left: 10.6667px;
+      top: 21.3333px; /* Reduzido proporcionalmente de 32px para ~21.3333px */
+    }
+  
+    73% {
+      left: 10.6667px;
+      top: 21.3333px;
+    }
+  
+    75% {
+      left: 0;
+      top: 21.3333px; /* Reduzido proporcionalmente de 32px para ~21.3333px */
+    }
+  
+    85.5% {
+      left: 0;
+      top: 21.3333px;
+    }
+  
+    87.5% {
+      left: 0;
+      top: 10.6667px; /* Reduzido proporcionalmente de 16px para ~10.6667px */
+    }
+  
+    98% {
+      left: 0;
+      top: 10.6667px;
+    }
+  
+    100% {
+      left: 0;
+      top: 0;
+    }
+  }
+  
+  .loader {
+    position: relative;
+    width: 32px; /* Reduzido de 48px para 32px */
+    height: 32px; /* Reduzido de 48px para 32px */
+    transform: rotate(45deg);
+  }
+  
+  .loader-square {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 9px; /* Reduzido de 14px para 9px */
+    height: 9px; /* Reduzido de 14px para 9px */
+    margin: 0.5px; /* Reduzido de 1px para 0.5px */
+    border-radius: 3px; /* Ajustado proporcionalmente */
+    background: #4F46E5; /* Cor de fundo */
+    animation: square-animation 10s ease-in-out infinite both;
+  }
+  
+  /* Atualizar os delays das animações */
+  .loader-square:nth-of-type(1) {
+    animation-delay: 0s;
+  }
+  
+  .loader-square:nth-of-type(2) {
+    animation-delay: -0.7142857143s; /* Reduzido proporcionalmente */
+  }
+  
+  .loader-square:nth-of-type(3) {
+    animation-delay: -1.4285714286s;
+  }
+  
+  .loader-square:nth-of-type(4) {
+    animation-delay: -2.1428571429s;
+  }
+  
+  .loader-square:nth-of-type(5) {
+    animation-delay: -2.8571428571s;
+  }
+  
+  .loader-square:nth-of-type(6) {
+    animation-delay: -3.5714285714s;
+  }
+  
+  .loader-square:nth-of-type(7) {
+    animation-delay: -4.2857142857s;
+  }
+  
+  .loader-square:nth-of-type(8) {
+    animation-delay: -5s;
+  }
+  
+  /* Responsividade ajustada para o novo tamanho */
+  @media (max-width: 768px) {
+    .loader {
+      width: 16px; /* Reduzido de 24px para 16px */
+      height: 16px;
+    }
+  
+    .loader-square {
+      width: 4.5px; /* Reduzido de 7px para 4.5px */
+      height: 4.5px;
+      margin: 0.25px; /* Reduzido de 0.5px para 0.25px */
+    }
+  }
+  

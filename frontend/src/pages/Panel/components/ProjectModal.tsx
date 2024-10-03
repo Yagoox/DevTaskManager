@@ -1,4 +1,5 @@
 // src/pages/Panel/components/ProjectModal.tsx
+
 import React, { useState, useEffect } from 'react';
 
 interface ProjectModalProps {
@@ -20,22 +21,22 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ isOpen, onClose, onSave, in
   return (
     <div className="modal-overlay">
       <div className="modal-content">
-        <h3 className="text-xl font-semibold text-gray-800 mb-4">{initialName ? 'Editar Projeto' : 'Novo Projeto'}</h3>
+        <h3 className="text-xl font-semibold text-textPrimary mb-4">
+          {initialName ? 'Editar Projeto' : 'Novo Projeto'}
+        </h3>
         <input
           type="text"
           placeholder="Nome do Projeto"
           className="input mb-4"
           value={name}
           onChange={(e) => setName(e.target.value)}
+          required
         />
         <div className="flex justify-end space-x-2">
           <button onClick={onClose} className="btn btn-secondary">
             Cancelar
           </button>
-          <button
-            onClick={() => onSave(name)}
-            className="btn btn-primary"
-          >
+          <button onClick={() => onSave(name)} className="btn btn-primary">
             Salvar
           </button>
         </div>
