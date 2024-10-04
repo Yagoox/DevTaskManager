@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { PencilIcon, TrashIcon } from '@heroicons/react/24/solid';
 import { Project } from '../../../types';
 
@@ -19,6 +19,26 @@ const Sidebar: React.FC<SidebarProps> = ({
   onEditProject,
   onDeleteProject,
 }) => {
+  const [openDropdownId, setOpenDropdownId] = useState<number | null>(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  const toggleDropdown = (id: number) => {
+    setOpenDropdownId(openDropdownId === id ? null : id);
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setOpenDropdownId(null);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
   return (
     <aside className="w-64 bg-surface border-r border-gray-200 rounded-lg shadow-md">
       <div className="px-6 py-6">
@@ -45,7 +65,6 @@ const Sidebar: React.FC<SidebarProps> = ({
           </button>
         </div>
 
-        {/* Lista de Projetos */}
         <ul className="space-y-3">
           {projects.map((project) => {
             if (project.id === undefined || project.id === null) {
@@ -65,31 +84,48 @@ const Sidebar: React.FC<SidebarProps> = ({
                 }`}
                 onClick={() => onSelectProject(project.id)}
               >
-                {/* Nome do Projeto */}
                 <span className="font-medium">{project.name}</span>
 
-                {/* Ícones de Edição e Exclusão */}
-                <div className="flex items-center space-x-2">
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation(); // Evita que o clique no botão dispare a seleção do projeto
-                      onEditProject(project.id);
-                    }}
-                    className="text-gray-500 hover:text-primary focus:outline-none"
-                    aria-label={`Editar projeto ${project.name}`}
-                  >
-                    <PencilIcon className="h-5 w-5" />
-                  </button>
-                  <button
+                <div className="relative">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    x="0px"
+                    y="0px"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 48 48"
+                    className="h-4 w-4 text-gray-500 hover:text-primary cursor-pointer"
                     onClick={(e) => {
                       e.stopPropagation();
-                      onDeleteProject(project.id);
+                      toggleDropdown(project.id);
                     }}
-                    className="text-error hover:text-red-600 focus:outline-none"
-                    aria-label={`Excluir projeto ${project.name}`}
                   >
-                    <TrashIcon className="h-5 w-5" />
-                  </button>
+                    <path d="M 13.486328 12.978516 A 1.50015 1.50015 0 0 0 12.439453 13.439453 L 2.4394531 23.439453 A 1.50015 1.50015 0 0 0 2.4394531 25.560547 L 12.439453 35.560547 A 1.50015 1.50015 0 1 0 14.560547 33.439453 L 7.1210938 26 L 40.878906 26 L 33.439453 33.439453 A 1.50015 1.50015 0 1 0 35.560547 35.560547 L 45.560547 25.560547 A 1.50015 1.50015 0 0 0 45.560547 23.439453 L 35.560547 13.439453 A 1.50015 1.50015 0 0 0 34.484375 12.984375 A 1.50015 1.50015 0 0 0 33.439453 15.560547 L 40.878906 23 L 7.1210938 23 L 14.560547 15.560547 A 1.50015 1.50015 0 0 0 13.486328 12.978516 z"></path>
+                  </svg>
+                  {openDropdownId === project.id && (
+                    <div ref={dropdownRef} className="absolute right-0 mt-2 w-36 bg-white rounded-md shadow-lg py-1 z-20 ring-1 ring-black ring-opacity-5">
+                      <button
+                        className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onEditProject(project.id);
+                        }}
+                      >
+                        <PencilIcon className="h-4 w-4 mr-2" />
+                        Editar
+                      </button>
+                      <button
+                        className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onDeleteProject(project.id);
+                        }}
+                      >
+                        <TrashIcon className="h-4 w-4 mr-2 text-red-500" />
+                        Excluir
+                      </button>
+                    </div>
+                  )}
                 </div>
               </li>
             );
