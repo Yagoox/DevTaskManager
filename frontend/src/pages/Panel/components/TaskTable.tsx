@@ -61,20 +61,19 @@ const TaskTable: React.FC<TaskTableProps> = ({ tasks, onEditTask, onDeleteTask }
               </span>
             </div>
             <div className="relative">
-              <svg
+            <svg
                 xmlns="http://www.w3.org/2000/svg"
-                x="0px"
-                y="0px"
-                width="24"
-                height="24"
-                viewBox="0 0 48 48"
-                className="h-4 w-4 text-gray-500 hover:text-primary cursor-pointer"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth="1.5"
+                stroke="currentColor"
+                className="h-4 w-5 text-black-500 hover:text-primary cursor-pointer"
                 onClick={(e) => {
                   e.stopPropagation();
                   toggleDropdown(task.id);
                 }}
               >
-                <path d="M 13.486328 12.978516 A 1.50015 1.50015 0 0 0 12.439453 13.439453 L 2.4394531 23.439453 A 1.50015 1.50015 0 0 0 2.4394531 25.560547 L 12.439453 35.560547 A 1.50015 1.50015 0 1 0 14.560547 33.439453 L 7.1210938 26 L 40.878906 26 L 33.439453 33.439453 A 1.50015 1.50015 0 1 0 35.560547 35.560547 L 45.560547 25.560547 A 1.50015 1.50015 0 0 0 45.560547 23.439453 L 35.560547 13.439453 A 1.50015 1.50015 0 0 0 34.484375 12.984375 A 1.50015 1.50015 0 0 0 33.439453 15.560547 L 40.878906 23 L 7.1210938 23 L 14.560547 15.560547 A 1.50015 1.50015 0 0 0 13.486328 12.978516 z"></path>
+                <path strokeLinecap="round" strokeLinejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
               </svg>
               {openDropdownId === task.id && (
                 <div ref={dropdownRef} className="absolute right-0 mt-2 w-36 bg-white rounded-md shadow-lg py-1 z-20 ring-1 ring-black ring-opacity-5">
