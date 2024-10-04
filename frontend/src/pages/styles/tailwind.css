@@ -3,8 +3,9 @@
 @tailwind components;
 @tailwind utilities;
 
-
 @layer components {
+  /* Removida a animação existente */
+  /*
   @keyframes gradientBG {
     0% {
       background-position: 0% 50%;
@@ -16,7 +17,7 @@
       background-position: 0% 50%;
     }
   }
-}
+
   .animated-gradient {
     background: linear-gradient(-45deg, 
       rgba(107, 33, 168, 0.4),
@@ -27,9 +28,16 @@
     background-size: 400% 400%;
     animation: gradientBG 30s ease infinite;
     opacity: 0.5;
-}
+  }
+  */
 
-@layer components {
+  /* Nova Classe para Fundo Fixo com Gradiente Suave e Direção Invertida */
+  .bg-fixed-bg {
+    @apply bg-gradient-to-tl from-gray-100 via-purple-200 to-gray-100;
+  }
+
+  /* ... outras classes existentes ... */
+
   .btn {
     @apply inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md font-medium shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 transition duration-150 ease-in-out;
   }

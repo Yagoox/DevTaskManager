@@ -1,5 +1,3 @@
-// frontend/src/pages/Panel/components/Sidebar.tsx
-
 import React from 'react';
 import { PencilIcon, TrashIcon } from '@heroicons/react/24/solid';
 import { Project } from '../../../types';
@@ -24,20 +22,42 @@ const Sidebar: React.FC<SidebarProps> = ({
   return (
     <aside className="w-64 bg-surface border-r border-gray-200 rounded-lg shadow-md">
       <div className="px-6 py-6">
-        <h2 className="text-xl font-semibold text-textPrimary mb-6">Projetos</h2>
-        {/* Substituir 'divide-y divide-gray-200' por 'space-y-3' */}
+        <div className="flex items-center justify-between border-b pb-3 mb-4">
+          <h2 className="text-lg font-bold text-textPrimary">Projetos</h2>
+          <button
+            onClick={onAddProject}
+            className="inline-flex items-center justify-center rounded-md text-sm font-medium focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 transition hover:bg-gray-200"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="w-5 h-5"
+            >
+              <path d="M12 5v14M5 12h14" />
+            </svg>
+          </button>
+        </div>
+
+        {/* Lista de Projetos */}
         <ul className="space-y-3">
           {projects.map((project) => {
             if (project.id === undefined || project.id === null) {
               console.warn('Projeto sem ID:', project);
-              return null; 
+              return null;
             }
 
             const isSelected = project.id === selectedProjectId;
 
             return (
               <li
-                key={project.id} 
+                key={project.id}
                 className={`flex items-center justify-between p-3 rounded-md cursor-pointer transition-colors ${
                   isSelected
                     ? 'border-l-4 border-primary bg-gray-50 text-primary'
@@ -45,11 +65,14 @@ const Sidebar: React.FC<SidebarProps> = ({
                 }`}
                 onClick={() => onSelectProject(project.id)}
               >
+                {/* Nome do Projeto */}
                 <span className="font-medium">{project.name}</span>
+
+                {/* Ícones de Edição e Exclusão */}
                 <div className="flex items-center space-x-2">
                   <button
                     onClick={(e) => {
-                      e.stopPropagation();
+                      e.stopPropagation(); // Evita que o clique no botão dispare a seleção do projeto
                       onEditProject(project.id);
                     }}
                     className="text-gray-500 hover:text-primary focus:outline-none"
@@ -72,9 +95,6 @@ const Sidebar: React.FC<SidebarProps> = ({
             );
           })}
         </ul>
-        <button onClick={onAddProject} className="mt-6 w-full btn btn-primary">
-          + Novo Projeto
-        </button>
       </div>
     </aside>
   );

@@ -20,10 +20,6 @@ const Header: React.FC<HeaderProps> = ({ toggleMobileMenu }) => {
           <h1 className="text-2xl font-semibold text-gray-800">DevTaskManager</h1>
         </div>
         <nav className="hidden md:flex items-center space-x-6">
-          <a href="#" className="text-gray-600 hover:text-primary">Projetos</a>
-          <a href="#" className="text-gray-600 hover:text-primary">Tarefas</a>
-          <a href="#" className="text-gray-600 hover:text-primary">Calendário</a>
-          <a href="#" className="text-gray-600 hover:text-primary">Relatórios</a>
           <UserCircleIcon className="h-8 w-8 text-gray-600 hover:text-primary cursor-pointer" />
         </nav>
       </div>

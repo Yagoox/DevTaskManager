@@ -1,5 +1,3 @@
-// src/pages/Panel/App.tsx
-
 import React, { useState, useCallback } from 'react';
 import Header from './components/Header';
 import Sidebar from './components/Sidebar';
@@ -12,13 +10,9 @@ import '@/pages/styles/tailwind.css';
 import MobileMenu from './components/MobileMenu';
 import useProjects from '../hooks/useProjects';
 import useTasks from '../hooks/useTasks';
-import AnimatedGradient from './components/AnimatedGradient'; // Importação correta
 
 const App: React.FC = () => {
-  // Estado para controlar a visibilidade do menu mobile
   const [mobileMenuVisible, setMobileMenuVisible] = useState(false);
-
-  // Estado para notificações
   const [notifications, setNotifications] = useState<NotificationType[]>([]);
 
   const showNotification = useCallback(
@@ -34,7 +28,6 @@ const App: React.FC = () => {
     setNotifications((prev) => prev.filter((n) => n.id !== id));
   }, []);
 
-  // Utilizando o hook useProjects
   const {
     projects,
     selectedProjectId,
@@ -49,7 +42,6 @@ const App: React.FC = () => {
     setProjects,
   } = useProjects({ showNotification });
 
-  // Utilizando o hook useTasks
   const {
     taskModalOpen,
     editingTaskId,
@@ -65,20 +57,16 @@ const App: React.FC = () => {
     showNotification,
   });
 
-  // Função para alternar a visibilidade do menu mobile.
   const toggleMobileMenu = () => {
     setMobileMenuVisible((prev) => !prev);
   };
 
-  // Encontrar o projeto selecionado (se houver)
   const selectedProject = Array.isArray(projects)
     ? projects.find((project) => project.id === selectedProjectId)
     : null;
 
   return (
-    <div className="relative flex flex-col h-screen bg-background overflow-hidden">
-      <AnimatedGradient />
-
+    <div className="flex flex-col h-screen bg-fixed-bg overflow-hidden">
       <div className="relative z-10 flex flex-col h-full">
         <Header toggleMobileMenu={toggleMobileMenu} />
         <MobileMenu isVisible={mobileMenuVisible} />
@@ -91,30 +79,30 @@ const App: React.FC = () => {
             onEditProject={handleEditProject}
             onDeleteProject={handleDeleteProject}
           />
-          <div className="bg-surface rounded-lg shadow-lg p-4 flex flex-col">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-bold text-textPrimary">Tasks</h2>
+          <div className="bg-surface rounded-lg shadow-lg p-4 flex flex-col py-6">
+            {/* Header da Tabela de Tarefas com Linha Separadora */}
+            <div className="flex items-center justify-between border-b pb-3 mb-4">
+              <h2 className="text-lg font-bold text-textPrimary">Tarefas</h2>
               <button
-              onClick={handleAddTask}
-              className="inline-flex items-center justify-center rounded-md text-sm font-medium bg-primary text-primary-foreground hover:bg-primary-hover focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 w-10" // Alterado de bg-accent para bg-primary
-              aria-label="Adicionar Tarefa"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="w-5 h-5"
+                onClick={handleAddTask}
+                className="inline-flex items-center justify-center rounded-md text-sm font-medium focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 transition hover:bg-gray-200"
               >
-                <path d="M5 12h14"></path>
-                <path d="M12 5v14"></path>
-              </svg>
-            </button>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="w-5 h-5"
+                >
+                  <path d="M5 12h14"></path>
+                  <path d="M12 5v14"></path>
+                </svg>
+              </button>
             </div>
             <TaskTable
               tasks={selectedProject?.tasks || []}
@@ -124,7 +112,6 @@ const App: React.FC = () => {
           </div>
         </main>
 
-        {/* Modais */}
         <ProjectModal
           isOpen={projectModalOpen}
           onClose={() => setProjectModalOpen(false)}
@@ -146,7 +133,6 @@ const App: React.FC = () => {
           }
         />
 
-        {/* Notificações */}
         <div className="fixed top-4 right-4 z-50">
           {notifications.map((n) => (
             <Notification
