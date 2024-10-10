@@ -19,7 +19,7 @@ export default defineConfig({
     rollupOptions: {
       input: {
         background: 'frontend/src/pages/background/index.ts',
-        main: path.resolve(__dirname, 'frontend/src/pages/Panel/index.html'),
+        main: path.resolve(__dirname, 'frontend/src/pages/home/index.html'),
       }
     }
   },

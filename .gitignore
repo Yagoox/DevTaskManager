@@ -6,16 +6,26 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
-''
-node_modules
-dist
-dist-ssr
+
+# Dependências
+node_modules/
+dist/
+dist-ssr/
 *.local
 
-# Editor directories and files
-.vscode/*
+# Diretórios de build
+bin/
+obj/
+
+# Arquivos de banco de dados
+*.db
+*.db-shm
+*.db-wal
+
+# Diretórios e arquivos do editor
+.vscode/
 !.vscode/extensions.json
-.idea
+.idea/
 .DS_Store
 *.suo
 *.ntvs*
