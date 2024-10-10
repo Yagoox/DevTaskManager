@@ -1,6 +1,6 @@
 // frontend/src/pages/Panel/index.tsx
 import React from 'react';
-import ReactDOM from 'react-dom/client'; // Import correto para React 18
+import ReactDOM from 'react-dom/client'; 
 import App from './App';
 
 const rootElement = document.getElementById('root');

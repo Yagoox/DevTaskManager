@@ -1,7 +1,7 @@
 chrome.action.onClicked.addListener(function() {
   console.log('Background script is running.');
   chrome.windows.create({
-    url: chrome.runtime.getURL('./frontend/src/pages/Panel/index.html'), // Ajuste conforme necessário
+    url: chrome.runtime.getURL('frontend/src/pages/home/index.html'), 
     type: 'popup',
     width: 1000,
     height: 600,

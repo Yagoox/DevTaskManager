@@ -19,8 +19,9 @@
     "paths": {
       "@/components/*": ["frontend/src/pages/components/*"],
       "@/lib/*": ["frontend/src/lib/*"],
-      "@/types": ["frontend/src/types.d.ts"] 
-    }
+      "@/types": ["frontend/src/types.d.ts"]
+    },
+    "types": ["node", "react", "react-dom", "react-router-dom", "chrome"]
   },
   "include": ["frontend/src"],
   "exclude": ["build", "node_modules"]

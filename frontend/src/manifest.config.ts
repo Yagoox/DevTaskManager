@@ -31,7 +31,7 @@ export default defineManifest(async () => ({
     },
     permissions: ["tabs", "storage", "scripting", "unlimitedStorage", "sidePanel", "activeTab", "windows"] as chrome.runtime.ManifestPermissions[],
     web_accessible_resources: [{
-        resources: ["frontend/src/pages/Panel/index.html*"],
+        resources: ["frontend/src/pages/home/index.html*"],
         matches: ["http://*/*", "https://*/*"],
         use_dynamic_url: true
     }],

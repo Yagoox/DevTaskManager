@@ -9,7 +9,7 @@ export interface Task {
 export interface Project {
   id: number;
   name: string;
-  tasks: Task[]; // Assegure-se de que tasks é um array de Task
+  tasks: Task[]; 
 }
 
 export interface NotificationType {
