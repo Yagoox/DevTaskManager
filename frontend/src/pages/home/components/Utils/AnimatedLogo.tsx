@@ -1,6 +1,6 @@
 // src/pages/Panel/components/AnimatedLogo.tsx
 import React from 'react';
-import '../../styles/AnimatedLogo.css'; 
+import '../../../styles/AnimatedLogo.css'; 
 
 const AnimatedLogo: React.FC = () => {
   return (

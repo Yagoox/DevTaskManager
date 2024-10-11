@@ -1,15 +1,17 @@
 import React, { useState, useCallback } from 'react';
-import Header from './components/Header';
-import Sidebar from './components/Sidebar';
-import TaskTable from './components/TaskTable';
-import ProjectModal from './components/ProjectModal';
-import TaskModal from './components/TaskModal';
-import Notification from './components/Notification';
+import Header from './components/Header/Header';
+import Sidebar from './components/Sidebar/Sidebar';
+import TaskTable from './components/TaskTable/TaskTable';
+import ProjectModal from './components/Modals/ProjectModal';
+import TaskModal from './components/Modals/TaskModal';
+import Notification from './components/Notifications/Notification';
 import { NotificationType } from '../../types';
 import '@/pages/styles/tailwind.css';
-import MobileMenu from './components/MobileMenu';
+import MobileMenu from './components/MobileMenu/MobileMenu';
 import useProjects from '../hooks/useProjects';
 import useTasks from '../hooks/useTasks';
+import styles from '@/pages/styles/scroll.module.css';
+
 
 const App: React.FC = () => {
   const [mobileMenuVisible, setMobileMenuVisible] = useState(false);
@@ -65,84 +67,95 @@ const App: React.FC = () => {
     ? projects.find((project) => project.id === selectedProjectId)
     : null;
 
-  return (
-    <div className="flex flex-col h-screen bg-fixed-bg overflow-hidden">
-      <div className="relative z-10 flex flex-col h-full">
+    return (
+      <div className="flex flex-col min-h-screen bg-fixed-bg">
         <Header toggleMobileMenu={toggleMobileMenu} />
         <MobileMenu isVisible={mobileMenuVisible} />
-        <main className="flex-1 grid grid-cols-[250px_1fr] gap-6 p-6">
-          <Sidebar
-            projects={projects}
-            selectedProjectId={selectedProjectId}
-            onSelectProject={handleSelectProject}
-            onAddProject={handleAddProject}
-            onEditProject={handleEditProject}
-            onDeleteProject={handleDeleteProject}
-          />
-          <div className="bg-surface rounded-lg shadow-lg p-4 flex flex-col py-6">
-            {/* Header da Tabela de Tarefas com Linha Separadora */}
-            <div className="flex items-center justify-between border-b pb-3 mb-4">
-              <h2 className="text-lg font-bold text-textPrimary">Tarefas</h2>
-              <button
-                onClick={handleAddTask}
-                className="inline-flex items-center justify-center rounded-md text-sm font-medium focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 transition hover:bg-gray-200"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="w-5 h-5"
-                >
-                  <path d="M5 12h14"></path>
-                  <path d="M12 5v14"></path>
-                </svg>
-              </button>
-            </div>
-            <TaskTable
-              tasks={selectedProject?.tasks || []}
-              onEditTask={handleEditTask}
-              onDeleteTask={handleDeleteTask}
+        <main className="flex-1 p-6">
+          <div className="flex gap-6">
+            {/* Sidebar */}
+            <Sidebar
+              projects={projects}
+              selectedProjectId={selectedProjectId}
+              onSelectProject={handleSelectProject}
+              onAddProject={handleAddProject}
+              onEditProject={handleEditProject}
+              onDeleteProject={handleDeleteProject}
             />
+  
+            {/* Seção de Tarefas */}
+            <div className="flex-1 bg-surface rounded-lg shadow-lg p-4 flex flex-col">
+              {/* Header da Tabela de Tarefas com Linha Separadora */}
+              <div className="flex items-center justify-between border-b pb-3 mb-4">
+                <h2 className="text-lg font-bold text-textPrimary">Tarefas</h2>
+                {selectedProject && (
+                <button
+                  onClick={handleAddTask}
+                  className="inline-flex items-center justify-center rounded-md text-sm font-medium focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 transition hover:bg-gray-200"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-5 w-5 text-primary"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                  </svg>
+                </button>
+                )}
+              </div>
+  
+              {/* Conteúdo da Seção de Tarefas */}
+              {selectedProject ? (
+                <div className={`${styles.scrollArea} overflow-y-auto`} style={{ maxHeight: '60vh' }}>
+                  <TaskTable
+                    tasks={selectedProject.tasks || []}
+                    onEditTask={handleEditTask}
+                    onDeleteTask={handleDeleteTask}
+                  />
+                </div>
+              ) : (
+                <div className="flex items-center justify-center flex-1">
+                  <p className="text-gray-500 text-lg">Selecione um projeto para visualizar as tarefas.</p>
+                </div>
+              )}
+            </div>
           </div>
         </main>
 
-        <ProjectModal
-          isOpen={projectModalOpen}
-          onClose={() => setProjectModalOpen(false)}
-          onSave={handleSaveProject}
-          initialName={
-            editingProjectId ? projects.find((p) => p.id === editingProjectId)?.name : undefined
-          }
-        />
-        <TaskModal
-          isOpen={taskModalOpen}
-          onClose={() => setTaskModalOpen(false)}
-          onSave={handleSaveTask}
-          initialTask={
-            editingTaskId
-              ? Array.isArray(selectedProject?.tasks)
-                ? selectedProject.tasks.find((t) => t.id === editingTaskId)
-                : undefined
+      {/* Modais */}
+      <ProjectModal
+        isOpen={projectModalOpen}
+        onClose={() => setProjectModalOpen(false)}
+        onSave={handleSaveProject}
+        initialName={
+          editingProjectId ? projects.find((p) => p.id === editingProjectId)?.name : undefined
+        }
+      />
+      <TaskModal
+        isOpen={taskModalOpen}
+        onClose={() => setTaskModalOpen(false)}
+        onSave={handleSaveTask}
+        initialTask={
+          editingTaskId
+            ? Array.isArray(selectedProject?.tasks)
+              ? selectedProject.tasks.find((t) => t.id === editingTaskId)
               : undefined
-          }
-        />
+            : undefined
+        }
+      />
 
-        <div className="fixed top-4 right-4 z-50">
-          {notifications.map((n) => (
-            <Notification
-              key={n.id}
-              message={n.message}
-              type={n.type}
-              onClose={() => closeNotification(n.id)}
-            />
-          ))}
-        </div>
+      {/* Notificações */}
+      <div className="fixed top-4 right-4 z-50">
+        {notifications.map((n) => (
+          <Notification
+            key={n.id}
+            message={n.message}
+            type={n.type}
+            onClose={() => closeNotification(n.id)}
+          />
+        ))}
       </div>
     </div>
   );

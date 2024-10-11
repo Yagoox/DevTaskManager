@@ -524,15 +524,25 @@
 │       │   │   ├── App.tsx
 │       │   │   ├── client.ts
 │       │   │   ├── components
-│       │   │   │   ├── AnimatedGradient.tsx
-│       │   │   │   ├── AnimatedLogo.tsx
-│       │   │   │   ├── Header.tsx
-│       │   │   │   ├── MobileMenu.tsx
-│       │   │   │   ├── Notification.tsx
-│       │   │   │   ├── ProjectModal.tsx
-│       │   │   │   ├── Sidebar.tsx
-│       │   │   │   ├── TaskModal.tsx
-│       │   │   │   └── TaskTable.tsx
+│       │   │   │   ├── Header
+│       │   │   │   │   ├── Header.tsx
+│       │   │   │   │   └── ProfileDropdown.tsx
+│       │   │   │   ├── MobileMenu
+│       │   │   │   │   └── MobileMenu.tsx
+│       │   │   │   ├── Modals
+│       │   │   │   │   ├── ProjectModal.tsx
+│       │   │   │   │   └── TaskModal.tsx
+│       │   │   │   ├── Notifications
+│       │   │   │   │   └── Notification.tsx
+│       │   │   │   ├── Sidebar
+│       │   │   │   │   ├── ProjectItem.tsx
+│       │   │   │   │   └── Sidebar.tsx
+│       │   │   │   ├── TaskTable
+│       │   │   │   │   ├── TaskItem.tsx
+│       │   │   │   │   └── TaskTable.tsx
+│       │   │   │   └── Utils
+│       │   │   │       ├── AnimatedGradient.tsx
+│       │   │   │       └── AnimatedLogo.tsx
 │       │   │   ├── index.html
 │       │   │   └── index.tsx
 │       │   ├── hooks
@@ -540,6 +550,7 @@
 │       │   │   └── useTasks.ts
 │       │   └── styles
 │       │       ├── AnimatedLogo.css
+│       │       ├── scroll.module.css
 │       │       ├── styles.css
 │       │       └── tailwind.css
 │       ├── services
@@ -553,4 +564,4 @@
 ├── vite.config.ts
 └── vite.config.ts.timestamp-1722906679172.js
 
-165 directories, 388 files
+172 directories, 392 files
