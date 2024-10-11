@@ -1,7 +1,7 @@
 // src/pages/Panel/components/TaskModal.tsx
 
 import React, { useState, useEffect } from 'react';
-import { Task } from '../../../types';
+import { Task } from '../../../../types';
 
 interface TaskModalProps {
   isOpen: boolean;

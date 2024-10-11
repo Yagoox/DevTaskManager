@@ -12,6 +12,8 @@ node_modules/
 dist/
 dist-ssr/
 *.local
+.env
+
 
 # Diretórios de build
 bin/
@@ -32,3 +34,4 @@ obj/
 *.njsproj
 *.sln
 *.sw?
+.env
