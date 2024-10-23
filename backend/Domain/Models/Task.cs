@@ -34,6 +34,13 @@ namespace DevTaskManager.Models
         public string Status { get; set; } = "A Fazer";
 
         /**
+         * A descrição da tarefa.
+         * Tem um comprimento máximo de 100 caracteres.
+         */
+        [MaxLength(100)]
+        public string Description { get; set; } = string.Empty;
+
+        /**
          * O ID do projeto ao qual a tarefa está associada.
          * É uma chave estrangeira que referencia o projeto.
          */

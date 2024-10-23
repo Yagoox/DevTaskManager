@@ -1,5 +1,3 @@
-// frontend/src/pages/hooks/useTasks.ts
-
 import { useState } from 'react';
 import TaskService from '../../services/TaskService';
 import { Project } from '../../types';
@@ -47,11 +45,11 @@ const useTasks = ({ selectedProjectId, setProjects, showNotification }: UseTasks
 
     try {
       await TaskService.deleteTask(selectedProjectId, id);
-      setProjects(prev =>
-        prev.map(project => {
+      setProjects((prev) =>
+        prev.map((project) => {
           if (project.id === selectedProjectId) {
             const updatedTasks = Array.isArray(project.tasks)
-              ? project.tasks.filter(task => task.id !== id)
+              ? project.tasks.filter((task) => task.id !== id)
               : [];
             return { ...project, tasks: updatedTasks };
           }
@@ -67,9 +65,9 @@ const useTasks = ({ selectedProjectId, setProjects, showNotification }: UseTasks
 
   /**
    * Salva uma nova tarefa ou atualiza uma tarefa existente.
-   * @param task Objeto contendo o nome e status da tarefa.
+   * @param task Objeto contendo o nome, status e descrição da tarefa.
    */
-  const handleSaveTask = async (task: { name: string; status: string }) => {
+  const handleSaveTask = async (task: { name: string; status: string; description: string }) => {
     if (selectedProjectId === null) {
       showNotification('Nenhum projeto selecionado.', 'error');
       return;
@@ -77,13 +75,21 @@ const useTasks = ({ selectedProjectId, setProjects, showNotification }: UseTasks
 
     try {
       if (editingTaskId) {
-        await TaskService.updateTask(selectedProjectId, editingTaskId, task.name, task.status);
-        setProjects(prev =>
-          prev.map(project => {
+        await TaskService.updateTask(
+          selectedProjectId,
+          editingTaskId,
+          task.name,
+          task.status,
+          task.description
+        );
+        setProjects((prev) =>
+          prev.map((project) => {
             if (project.id === selectedProjectId) {
               const updatedTasks = Array.isArray(project.tasks)
-                ? project.tasks.map(t =>
-                    t.id === editingTaskId ? { ...t, name: task.name, status: task.status } : t
+                ? project.tasks.map((t) =>
+                    t.id === editingTaskId
+                      ? { ...t, name: task.name, status: task.status, description: task.description }
+                      : t
                   )
                 : [];
               return { ...project, tasks: updatedTasks };
@@ -93,15 +99,20 @@ const useTasks = ({ selectedProjectId, setProjects, showNotification }: UseTasks
         );
         showNotification('Tarefa atualizada com sucesso!', 'success');
       } else {
-        const newTask = await TaskService.createTask(selectedProjectId, task.name, task.status);
+        const newTask = await TaskService.createTask(
+          selectedProjectId,
+          task.name,
+          task.status,
+          task.description
+        );
         console.log('Nova Tarefa:', newTask);
         if (newTask.id === undefined || newTask.id === null) {
           console.error('Tarefa criada sem ID:', newTask);
           showNotification('Erro ao criar tarefa: ID inválido.', 'error');
           return;
         }
-        setProjects(prev =>
-          prev.map(project => {
+        setProjects((prev) =>
+          prev.map((project) => {
             if (project.id === selectedProjectId) {
               const updatedTasks = Array.isArray(project.tasks)
                 ? [...project.tasks, newTask]

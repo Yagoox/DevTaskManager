@@ -4,7 +4,7 @@ import axios from 'axios';
 import { Task } from '../types';
 
 const api = axios.create({
-  baseURL: 'http://127.0.0.1:5146'  // Defina aqui a base URL da sua API
+  baseURL: 'http://127.0.0.1:5146', // Defina aqui a base URL da sua API
 });
 
 class TaskService {
@@ -13,22 +13,29 @@ class TaskService {
    * @param {number} projectId - ID do projeto.
    * @param {string} name - Nome da tarefa.
    * @param {string} status - Status da tarefa.
+   * @param {string} description - Descrição da tarefa.
    * @returns {Promise<Task>} - Retorna uma promessa que resolve para a tarefa criada.
    */
-  async createTask(projectId: number, name: string, status: string): Promise<Task> {
+  async createTask(
+    projectId: number,
+    name: string,
+    status: string,
+    description: string
+  ): Promise<Task> {
     try {
       const response = await api.post(`/api/projects/${projectId}/tasks`, {
         name,
         status,
+        description, // Inclui a descrição
       });
-  
+
       console.log('Tarefa criada:', response.data);
-  
+
       // Verifica se a resposta é um objeto de tarefa
       if (response.data && typeof response.data === 'object') {
         return response.data as Task;
       }
-  
+
       // Caso contrário, lança um erro indicando formato inesperado
       throw new Error('Formato de resposta inesperado da API ao criar tarefa.');
     } catch (error: unknown) {
@@ -43,11 +50,22 @@ class TaskService {
    * @param {number} taskId - ID da tarefa.
    * @param {string} name - Novo nome da tarefa.
    * @param {string} status - Novo status da tarefa.
+   * @param {string} description - Nova descrição da tarefa.
    * @returns {Promise<void>}
    */
-  async updateTask(projectId: number, taskId: number, name: string, status: string): Promise<void> {
+  async updateTask(
+    projectId: number,
+    taskId: number,
+    name: string,
+    status: string,
+    description: string
+  ): Promise<void> {
     try {
-      await api.put(`/api/projects/${projectId}/tasks/${taskId}`, { name, status }); // Caminho relativo via proxy
+      await api.put(`/api/projects/${projectId}/tasks/${taskId}`, {
+        name,
+        status,
+        description, // Inclui a descrição
+      });
       console.log(`Tarefa ${taskId} atualizada no projeto ${projectId}.`);
     } catch (error) {
       console.error('Erro na chamada updateTask:', error);
@@ -63,7 +81,7 @@ class TaskService {
    */
   async deleteTask(projectId: number, taskId: number): Promise<void> {
     try {
-      await api.delete(`/api/projects/${projectId}/tasks/${taskId}`); // Caminho relativo via proxy
+      await api.delete(`/api/projects/${projectId}/tasks/${taskId}`);
       console.log(`Tarefa ${taskId} deletada do projeto ${projectId}.`);
     } catch (error) {
       console.error('Erro na chamada deleteTask:', error);

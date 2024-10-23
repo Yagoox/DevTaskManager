@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
-    "target": "es5",
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "target": "ES6",  // Atualizado de "es5" para "ES6"
+    "lib": ["DOM", "DOM.Iterable", "ESNext"],
     "allowJs": false,
     "skipLibCheck": true,
     "esModuleInterop": true,
@@ -9,17 +9,16 @@
     "strict": true,
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true,
-    "module": "esnext",
+    "module": "ESNext",
     "moduleResolution": "node",
     "resolveJsonModule": true,
-    "noEmit": false,
-    "jsx": "react-jsx", 
-    "outDir": "./dist",
+    "noEmit": true,  // Atualizado para true, assumindo que Vite gerencia a emissão
+    "jsx": "react-jsx",
     "baseUrl": "./",
     "paths": {
       "@/components/*": ["frontend/src/pages/components/*"],
       "@/lib/*": ["frontend/src/lib/*"],
-      "@/types": ["frontend/src/types.d.ts"]
+      "@/types/*": ["frontend/src/types/*"]  // Ajustado para incluir * no final
     },
     "types": ["node", "react", "react-dom", "react-router-dom", "chrome"]
   },

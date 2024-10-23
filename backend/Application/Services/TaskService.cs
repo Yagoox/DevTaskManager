@@ -33,7 +33,7 @@ namespace DevTaskManager.Services
          * @return A tarefa recém-criada.
          * @throws KeyNotFoundException Se o projeto não for encontrado.
          */
-        public async Task<TaskItem> CreateTaskAsync(int projectId, string name, string status)
+        public async Task<TaskItem> CreateTaskAsync(int projectId, string name, string status, string description)
         {
             var project = await _context.Projects.FindAsync(projectId);
             if (project == null)
@@ -45,6 +45,7 @@ namespace DevTaskManager.Services
             {
                 Name = name,
                 Status = status,
+                Description = description,
                 ProjectId = projectId
             };
 
@@ -100,7 +101,7 @@ namespace DevTaskManager.Services
          * @param status O novo status da tarefa.
          * @throws KeyNotFoundException Se a tarefa ou projeto não forem encontrados.
          */
-        public async Task UpdateTaskAsync(int projectId, int taskId, string name, string status)
+        public async Task UpdateTaskAsync(int projectId, int taskId, string name, string status, string description)
         {
             var task = await _context.Tasks
                 .FirstOrDefaultAsync(t => t.ProjectId == projectId && t.Id == taskId);
@@ -111,6 +112,7 @@ namespace DevTaskManager.Services
 
             task.Name = name;
             task.Status = status;
+            task.Description = description;
 
             _context.Tasks.Update(task);
             await _context.SaveChangesAsync();

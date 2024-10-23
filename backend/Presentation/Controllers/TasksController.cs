@@ -41,12 +41,13 @@ namespace DevTaskManager.Controllers
 
             try
             {
-                var task = await _taskService.CreateTaskAsync(projectId, dto.Name, dto.Status);
+                var task = await _taskService.CreateTaskAsync(projectId, dto.Name, dto.Status, dto.Description);
 
                 var taskDto = new TaskDto
                 {
                     Id = task.Id,
                     Name = task.Name,
+                    Description = task.Description,
                     Status = task.Status
                 };
 
@@ -77,7 +78,7 @@ namespace DevTaskManager.Controllers
 
             try
             {
-                await _taskService.UpdateTaskAsync(projectId, taskId, dto.Name, dto.Status);
+                await _taskService.UpdateTaskAsync(projectId, taskId, dto.Name, dto.Status, dto.Description);
                 return NoContent();
             }
             catch (KeyNotFoundException)
@@ -125,7 +126,8 @@ namespace DevTaskManager.Controllers
                 {
                     Id = task.Id,
                     Name = task.Name,
-                    Status = task.Status
+                    Status = task.Status,
+                    Description = task.Description
                 });
                 return Ok(taskDtos);
             }
@@ -153,7 +155,8 @@ namespace DevTaskManager.Controllers
                 {
                     Id = task.Id,
                     Name = task.Name,
-                    Status = task.Status
+                    Status = task.Status,
+                    Description = task.Description
                 };
                 return Ok(taskDto);
             }
