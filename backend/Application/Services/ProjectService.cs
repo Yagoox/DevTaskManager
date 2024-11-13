@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using System.Linq; // Importante para usar o LINQ
+using System.Linq; 
 using System.Threading.Tasks;
 using DevTaskManager.Models;
 using Microsoft.EntityFrameworkCore;

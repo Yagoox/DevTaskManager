@@ -1,5 +1,3 @@
-// backend/Models/ProjectUpdateDto.cs
-
 using System.ComponentModel.DataAnnotations;
 
 namespace DevTaskManager.Models

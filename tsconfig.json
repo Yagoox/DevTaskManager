@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "ES6",  // Atualizado de "es5" para "ES6"
+    "target": "ES6",  
     "lib": ["DOM", "DOM.Iterable", "ESNext"],
     "allowJs": false,
     "skipLibCheck": true,
@@ -12,7 +12,7 @@
     "module": "ESNext",
     "moduleResolution": "node",
     "resolveJsonModule": true,
-    "noEmit": true,  // Atualizado para true, assumindo que Vite gerencia a emissão
+    "noEmit": true,  
     "jsx": "react-jsx",
     "baseUrl": "./",
     "paths": {

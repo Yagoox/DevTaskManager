@@ -93,7 +93,6 @@ const TaskItem: React.FC<TaskItemProps> = ({ task, onEdit, onDelete }) => {
           )}
         </div>
       </div>
-      {/* Exibe a descrição da tarefa */}
       <p className="mt-2 text-gray-600">{task.description}</p>
     </div>
   );

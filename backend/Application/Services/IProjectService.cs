@@ -1,5 +1,3 @@
-// backend/Services/IProjectService.cs
-
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using DevTaskManager.Models;

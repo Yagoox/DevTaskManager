@@ -1,5 +1,3 @@
-// backend/Models/TaskDto.cs
-
 namespace DevTaskManager.Models
 {
     public class TaskDto

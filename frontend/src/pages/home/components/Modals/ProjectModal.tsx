@@ -1,5 +1,3 @@
-// src/pages/Panel/components/ProjectModal.tsx
-
 import React, { useState, useEffect } from 'react';
 
 interface ProjectModalProps {

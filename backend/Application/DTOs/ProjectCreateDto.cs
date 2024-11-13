@@ -1,5 +1,3 @@
-// backend/Models/ProjectCreateDto.cs
-
 using System.ComponentModel.DataAnnotations;
 
 namespace DevTaskManager.Models

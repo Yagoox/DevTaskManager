@@ -1,5 +1,3 @@
-// backend/Services/ITaskService.cs
-
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using DevTaskManager.Models;

@@ -1,5 +1,3 @@
-// src/pages/Panel/components/ProjectItem.tsx
-
 import React, { useState, useRef, useEffect } from 'react';
 import { PencilIcon, TrashIcon } from '@heroicons/react/24/solid';
 import { Project } from '../../../../types';

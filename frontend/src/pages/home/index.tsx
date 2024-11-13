@@ -17,5 +17,5 @@ if (rootElement) {
   );
   console.log('React App renderizado com sucesso.');
 } else {
-  console.error('Elemento com id "root" não encontrado.');
+  console.error('Elemento com id "root" nao encontrado.');
 }

@@ -73,7 +73,7 @@ const App: React.FC = () => {
         <MobileMenu isVisible={mobileMenuVisible} />
         <main className="flex-1 p-6">
           <div className="flex gap-6">
-            {/* Sidebar */}
+            {/* sidebar */}
             <Sidebar
               projects={projects}
               selectedProjectId={selectedProjectId}
@@ -83,9 +83,8 @@ const App: React.FC = () => {
               onDeleteProject={handleDeleteProject}
             />
   
-            {/* Seção de Tarefas */}
+            {/* task */}
             <div className="flex-1 bg-surface rounded-lg shadow-lg p-4 flex flex-col">
-              {/* Header da Tabela de Tarefas com Linha Separadora */}
               <div className="flex items-center justify-between border-b pb-3 mb-4">
                 <h2 className="text-lg font-bold text-textPrimary">Tarefas</h2>
                 {selectedProject && (
@@ -106,7 +105,7 @@ const App: React.FC = () => {
                 )}
               </div>
   
-              {/* Conteúdo da Seção de Tarefas */}
+              {/* content tasks */}
               {selectedProject ? (
                 <div className={`${styles.scrollArea} overflow-y-auto`} style={{ maxHeight: '60vh' }}>
                   <TaskTable
@@ -124,7 +123,7 @@ const App: React.FC = () => {
           </div>
         </main>
 
-      {/* Modais */}
+      {/* modals */}
       <ProjectModal
         isOpen={projectModalOpen}
         onClose={() => setProjectModalOpen(false)}
@@ -146,7 +145,7 @@ const App: React.FC = () => {
         }
       />
 
-      {/* Notificações */}
+      {/* notification */}
       <div className="fixed top-4 right-4 z-50">
         {notifications.map((n) => (
           <Notification

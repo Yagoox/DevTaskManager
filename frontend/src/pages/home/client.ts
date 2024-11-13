@@ -1,4 +1,3 @@
-// frontend/src/pages/Panel/client.ts
 console.log('VITE_HOST:', import.meta.env.VITE_HOST);
 console.log('VITE_PORT:', import.meta.env.VITE_PORT);
 

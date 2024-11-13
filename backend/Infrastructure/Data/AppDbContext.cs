@@ -1,5 +1,3 @@
-// backend/Data/AppDbContext.cs
-
 using DevTaskManager.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -17,7 +15,6 @@ namespace DevTaskManager.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            // Configurações adicionais do modelo, se necessário
             base.OnModelCreating(modelBuilder);
         }
     }

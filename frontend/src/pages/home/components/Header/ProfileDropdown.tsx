@@ -1,5 +1,3 @@
-// src/pages/Panel/components/ProfileDropdown.tsx
-
 import React, { useState, useRef, useEffect } from 'react';
 import {
   UserCircleIcon,
@@ -39,7 +37,7 @@ const ProfileDropdown: React.FC = () => {
       />
       {isDropdownOpen && (
         <div className="absolute right-0 mt-2 w-56 bg-white rounded-md shadow-lg py-2 z-20 ring-1 ring-black ring-opacity-5">
-          {/* Informação do Usuário */}
+          {/* user*/}
           <div className="px-4 py-3">
             <p className="text-sm text-gray-500">Logado como</p>
             <div className="border-t border-gray-200 my-2 mx-4"></div>
@@ -52,7 +50,7 @@ const ProfileDropdown: React.FC = () => {
             </div>
           </div>
           <div className="border-t border-gray-200 my-2 mx-4"></div>
-          {/* Opções do Dropdown */}
+          {/* dropdown */}
           <div className="py-1">
             <a
               href="#"

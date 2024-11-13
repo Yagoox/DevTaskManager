@@ -1,4 +1,3 @@
-// src/pages/Panel/components/Notification.tsx
 import React, { useEffect } from 'react';
 import { CheckCircleIcon, ExclamationCircleIcon, InformationCircleIcon } from '@heroicons/react/24/solid';
 

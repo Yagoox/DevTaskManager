@@ -1,5 +1,3 @@
-// backend/Models/ProjectDto.cs
-
 using System.Collections.Generic;
 
 namespace DevTaskManager.Models

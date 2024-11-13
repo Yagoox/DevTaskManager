@@ -1,5 +1,3 @@
-// frontend/src/pages/hooks/useProjects.ts
-
 import { useState, useEffect } from 'react';
 import ProjectService from '../../services/ProjectService';
 import { Project } from '../../types';

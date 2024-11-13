@@ -3,7 +3,7 @@ using DevTaskManager.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using System.Collections.Generic;
-using System.Linq; // Adicionado para uso de LINQ
+using System.Linq; 
 
 namespace DevTaskManager.Controllers
 {

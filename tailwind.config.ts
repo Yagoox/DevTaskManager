@@ -2,7 +2,7 @@
 import type { Config } from 'tailwindcss';
 
 export default {
-  content: ['./frontend/src/**/*.{html,js,jsx,ts,tsx}'], // Certifique-se de que o caminho está correto
+  content: ['./frontend/src/**/*.{html,js,jsx,ts,tsx}'], 
   theme: {
     extend: {
       colors: {
@@ -29,11 +29,11 @@ export default {
         error: 'hsl(var(--error))',
         'error-foreground': 'hsl(var(--error-foreground))',
 
-        // **Novas Cores para Status das Tarefas**
+        
         status: {
-          todo: '#A855F7', // Roxo
-          inProgress: '#F97316', // Laranja
-          completed: '#10B981', // Verde
+          todo: '#A855F7', // roxo
+          inProgress: '#F97316', // laranja
+          completed: '#10B981', // vverde
         },
       },
       fontFamily: {

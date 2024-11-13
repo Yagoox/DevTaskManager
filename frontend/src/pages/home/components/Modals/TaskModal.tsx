@@ -11,17 +11,17 @@ interface TaskModalProps {
 const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose, onSave, initialTask }) => {
   const [name, setName] = useState('');
   const [status, setStatus] = useState<'A Fazer' | 'Em Progresso' | 'Concluída'>('A Fazer');
-  const [description, setDescription] = useState(''); // Novo estado para a descrição
+  const [description, setDescription] = useState(''); 
 
   useEffect(() => {
     if (initialTask) {
       setName(initialTask.name);
       setStatus(initialTask.status as 'A Fazer' | 'Em Progresso' | 'Concluída');
-      setDescription(initialTask.description); // Inicializa a descrição
+      setDescription(initialTask.description); 
     } else {
       setName('');
       setStatus('A Fazer');
-      setDescription(''); // Limpa a descrição
+      setDescription(''); 
     }
   }, [initialTask]);
 
@@ -36,7 +36,7 @@ const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose, onSave, initialT
         <form
           onSubmit={(e) => {
             e.preventDefault();
-            onSave({ name, status, description }); // Inclui a descrição
+            onSave({ name, status, description }); 
           }}
         >
           <div className="mb-4">
@@ -50,7 +50,7 @@ const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose, onSave, initialT
               required
             />
           </div>
-          <div className="mb-4"> {/* Novo campo para descrição */}
+          <div className="mb-4">
             <label className="block text-sm font-medium text-textPrimary mb-1">Descrição</label>
             <textarea
               placeholder="Descrição da Tarefa"

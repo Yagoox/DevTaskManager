@@ -2,7 +2,7 @@ import React from 'react';
 import { Project } from '../../../../types';
 import ProjectItem from './ProjectItem';
 import styles from '@/pages/styles/scroll.module.css';
-import { PlusIcon } from '@heroicons/react/24/outline'; // Importe o ícone
+import { PlusIcon } from '@heroicons/react/24/outline'; 
 
 interface SidebarProps {
   projects: Project[];

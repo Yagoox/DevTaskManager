@@ -1,5 +1,3 @@
-// src/pages/Panel/components/TaskTable.tsx
-
 import React from 'react';
 import { Task } from '../../../../types';
 import TaskItem from './TaskItem';
